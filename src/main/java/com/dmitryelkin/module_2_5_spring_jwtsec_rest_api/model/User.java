@@ -1,4 +1,4 @@
-package com.DmitryElkin_Servlets_REST_API.model;
+package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model;
 
 import jakarta.persistence.*;
 
@@ -14,7 +14,7 @@ public class User {
     private int id;
     private String name;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Event> events;
 
     public User() {

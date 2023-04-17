@@ -1,6 +1,7 @@
-package com.DmitryElkin_Servlets_REST_API.model;
+package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model;
 
 import jakarta.persistence.*;
+
 import java.util.Objects;
 
 @Entity
@@ -16,21 +17,17 @@ public class Event {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "file_id", unique = true, nullable = true)
     private File file;
-
-    @Enumerated(EnumType.STRING)
-    private TypeOfEvent typeOfEvent;
 
 
     public Event() {
     }
 
-    public Event(User user, File file, TypeOfEvent typeOfEvent) {
+    public Event(User user, File file) {
         this.user = user;
         this.file = file;
-        this.typeOfEvent = typeOfEvent;
     }
 
     public int getId() {

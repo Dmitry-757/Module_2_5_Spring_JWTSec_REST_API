@@ -1,4 +1,4 @@
-package com.DmitryElkin_Servlets_REST_API.model;
+package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model;
 
 import jakarta.persistence.*;
 
