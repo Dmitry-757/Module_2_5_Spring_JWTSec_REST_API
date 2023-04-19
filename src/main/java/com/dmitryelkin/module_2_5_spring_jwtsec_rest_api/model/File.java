@@ -11,7 +11,11 @@ public class File {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
     private String filePath;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public File() {
     }

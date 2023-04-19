@@ -23,6 +23,8 @@ public class Event {
     @JoinColumn(name = "file_id", unique = true, nullable = true)
     private File file;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public Event() {
         this.eventDateTime = LocalDateTime.now();

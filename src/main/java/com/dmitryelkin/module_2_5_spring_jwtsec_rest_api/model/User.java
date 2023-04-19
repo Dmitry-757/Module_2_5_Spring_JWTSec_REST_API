@@ -17,6 +17,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Event> events;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     public User() {
     }
 
