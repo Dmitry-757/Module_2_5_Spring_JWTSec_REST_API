@@ -52,6 +52,9 @@ public class Event {
 //        this.user = user;
 //    }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     @Override
     public boolean equals(Object o) {

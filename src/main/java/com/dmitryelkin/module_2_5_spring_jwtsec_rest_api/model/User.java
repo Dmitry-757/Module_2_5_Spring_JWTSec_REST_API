@@ -77,4 +77,8 @@ public class User {
     public void removeEvent(Event event){
         events.remove(event);
     }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }
