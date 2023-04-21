@@ -12,7 +12,7 @@ public class File {
     private int id;
     private String name;
 
-    private String filePath;
+    private String location;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -20,9 +20,9 @@ public class File {
     public File() {
     }
 
-    public File(String name, String filePath) {
+    public File(String name, String location) {
         this.name = name;
-        this.filePath = filePath;
+        this.location = location;
     }
 
     public int getId() {
@@ -49,16 +49,25 @@ public class File {
 //        this.filePath = filePath;
 //    }
 
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         File file = (File) o;
-        return id == file.id && name.equals(file.name) && filePath.equals(file.filePath);
+        return id == file.id && name.equals(file.name) && location.equals(file.location);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, filePath);
+        return Objects.hash(id, name, location);
     }
 }
