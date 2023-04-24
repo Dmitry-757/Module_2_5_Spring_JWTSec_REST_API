@@ -13,5 +13,4 @@ public interface UserServiceI {
     List<User> getAll();
     User getById(long id);
     User getByName(String name);
-
 }

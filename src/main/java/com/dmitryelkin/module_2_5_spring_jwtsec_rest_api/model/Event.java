@@ -36,6 +36,13 @@ public class Event {
         this.eventDateTime = LocalDateTime.now();
     }
 
+    public Event(int id, LocalDateTime eventDateTime, User user, File file) {
+        this.id = id;
+        this.eventDateTime = eventDateTime;
+        this.user = user;
+        this.file = file;
+    }
+
     public int getId() {
         return id;
     }
