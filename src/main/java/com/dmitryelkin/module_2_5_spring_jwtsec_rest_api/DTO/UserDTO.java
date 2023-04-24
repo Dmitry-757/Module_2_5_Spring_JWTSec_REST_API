@@ -6,13 +6,13 @@ public class UserDTO {
     private final int id;
     private final String name;
 
-    public UserDTO(int id, String name) {
-        this.id = id;
-        this.name = name;
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
     }
 
 
-    public User toUser(){
+    public User getUser(){
         return new User(id, name);
     }
 }

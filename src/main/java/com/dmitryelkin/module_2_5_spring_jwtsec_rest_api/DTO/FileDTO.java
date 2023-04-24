@@ -7,14 +7,14 @@ public class FileDTO {
     private final String name;
     private final String location;
 
-    public FileDTO(int id, String name, String location) {
-        this.id = id;
-        this.name = name;
-        this.location = location;
+    public FileDTO(File item) {
+        this.id = item.getId();
+        this.name = item.getName();
+        this.location = item.getLocation();
     }
 
 
-    public File toFile(){
+    public File getFile(){
         return new File( id, name, location);
     }
 }

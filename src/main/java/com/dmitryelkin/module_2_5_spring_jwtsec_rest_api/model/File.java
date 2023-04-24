@@ -43,18 +43,17 @@ public class File {
         return name;
     }
 
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public String getFilePath() {
-//        return filePath;
-//    }
-//
-//    public void setFilePath(String filePath) {
-//        this.filePath = filePath;
-//    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public Status getStatus() {
         return status;

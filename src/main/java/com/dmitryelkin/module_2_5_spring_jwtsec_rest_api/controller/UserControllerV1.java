@@ -1,5 +1,6 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.UserDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,13 @@ public class UserControllerV1 {
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable long id){
+    public ResponseEntity<UserDTO> getById(@PathVariable long id){
         User user = service.getById(id);
         if(user!= null) {
+            UserDTO dto = new UserDTO(user);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(user);
+                    .body(dto);
         } else{
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)

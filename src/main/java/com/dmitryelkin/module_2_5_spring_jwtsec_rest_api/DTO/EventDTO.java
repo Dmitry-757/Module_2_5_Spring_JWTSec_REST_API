@@ -22,14 +22,14 @@ public class EventDTO {
 //    }
 
 
-    public EventDTO(int id, LocalDateTime eventDateTime, User user, File file) {
-        this.id = id;
-        this.eventDateTime = eventDateTime;
-        this.user = user;
-        this.file = file;
+    public EventDTO(Event item) {
+        this.id = item.getId();
+        this.eventDateTime = item.getEventDateTime();
+        this.user = item.getUser();
+        this.file = item.getFile();
     }
 
-    public Event toEvent(){
+    public Event getEvent(){
         return new Event(id, eventDateTime, user, file);
     }
 }

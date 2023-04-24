@@ -42,25 +42,24 @@ public class User {
         return id;
     }
 
-//    public void setId(int id) {
-//        this.id = id;
-//    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
     }
 
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public List<Event> getEvents() {
-//        return events;
-//    }
-//
-//    public void setEvents(List<Event> events) {
-//        this.events = events;
-//    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -82,7 +81,4 @@ public class User {
         events.remove(event);
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 }
