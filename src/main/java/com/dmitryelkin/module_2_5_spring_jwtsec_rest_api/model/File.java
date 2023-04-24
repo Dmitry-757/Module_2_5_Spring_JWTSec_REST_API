@@ -1,6 +1,7 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ public class File {
     private String location;
 
     @Enumerated(EnumType.STRING)
+    @Value("Status.ACTIVE")
     private Status status;
 
     public File() {

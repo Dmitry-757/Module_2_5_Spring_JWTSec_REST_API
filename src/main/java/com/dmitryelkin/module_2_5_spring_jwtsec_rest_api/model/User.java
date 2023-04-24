@@ -1,6 +1,8 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class User {
     private List<Event> events;
 
     @Enumerated(EnumType.STRING)
+    @Value("Status.ACTIVE")
     private Status status;
 
     public User() {

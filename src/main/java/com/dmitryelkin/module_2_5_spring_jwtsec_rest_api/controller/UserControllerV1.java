@@ -6,10 +6,7 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceImpl
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,13 +21,16 @@ public class UserControllerV1 {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAll(){
+    public ResponseEntity<List<UserDTO>> getAll(){
         List<User> users = service.getAll();
-
         if(!users.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(users);
+                    .body(
+                            users.stream()
+                                    .map(UserDTO::new)
+                                    .toList()
+                    );
         } else{
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
@@ -39,10 +39,10 @@ public class UserControllerV1 {
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable long id){
-        User user = service.getById(id);
-        if(user!= null) {
-            UserDTO dto = new UserDTO(user);
+    public ResponseEntity<UserDTO> getById(@PathVariable Long id){
+        User item;
+        if( (id != null) && ( (item = service.getById(id)) != null) ) {
+            UserDTO dto = new UserDTO(item);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(dto);
@@ -51,6 +51,66 @@ public class UserControllerV1 {
                     .status(HttpStatus.NO_CONTENT)
                     .build();
 
+        }
+    }
+    @GetMapping("/{name}")
+    public ResponseEntity<UserDTO> getById(@PathVariable String name){
+        User item = service.getByName(name);
+        if(item != null) {
+            UserDTO dto = new UserDTO(item);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(dto);
+        } else{
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDTO> createItem(@RequestBody User item){
+        if (item != null){
+            User newItem = service.create(item);
+            UserDTO dto = new UserDTO(newItem);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(dto);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+    }
+    @PutMapping
+    public ResponseEntity<UserDTO> update(@RequestBody User item){
+        if (item != null && item.getId() != 0){
+            User updatingItem = service.update(item);
+            UserDTO dto = new UserDTO(updatingItem);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(dto);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserDTO> delete(@PathVariable Long id){
+        if( id != null ) {
+
+            User deletingItem = service.delete(id);
+            UserDTO dto = new UserDTO(deletingItem);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(dto);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
         }
     }
 

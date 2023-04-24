@@ -1,6 +1,7 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class Event {
     private File file;
 
     @Enumerated(EnumType.STRING)
+    @Value("Status.ACTIVE")
     private Status status;
 
     public Event() {
