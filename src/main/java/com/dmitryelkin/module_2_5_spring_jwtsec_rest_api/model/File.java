@@ -10,7 +10,7 @@ import java.util.Objects;
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private String name;
 
     private String location;
@@ -27,17 +27,17 @@ public class File {
         this.location = location;
     }
 
-    public File(int id, String name, String location) {
+    public File(long id, String name, String location) {
         this.id = id;
         this.name = name;
         this.location = location;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

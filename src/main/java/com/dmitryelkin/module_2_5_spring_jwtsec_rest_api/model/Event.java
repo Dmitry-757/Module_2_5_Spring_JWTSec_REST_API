@@ -12,7 +12,7 @@ import java.util.Objects;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime eventDateTime;
@@ -38,18 +38,18 @@ public class Event {
         this.eventDateTime = LocalDateTime.now();
     }
 
-    public Event(int id, LocalDateTime eventDateTime, User user, File file) {
+    public Event(long id, LocalDateTime eventDateTime, User user, File file) {
         this.id = id;
         this.eventDateTime = eventDateTime;
         this.user = user;
         this.file = file;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
