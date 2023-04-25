@@ -1,0 +1,5 @@
+ALTER TABLE users
+    ADD role VARCHAR(100) DEFAULT NULL;
+
+UPDATE users
+SET role='USER' WHERE id=1;

@@ -1,1 +1,1 @@
-create schema if not exists proselyte_module_2_4_db
+create schema if not exists proselyte_module_2_5_db

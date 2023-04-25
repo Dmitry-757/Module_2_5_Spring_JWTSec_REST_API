@@ -1,21 +1,27 @@
-CREATE TABLE files (
-                       id int NOT NULL AUTO_INCREMENT,
-                       filePath varchar(255) DEFAULT NULL,
-                       name varchar(255) DEFAULT NULL,
-                       PRIMARY KEY (`id`)
-);
-
 CREATE TABLE users (
                        id int NOT NULL AUTO_INCREMENT,
                        name varchar(255) DEFAULT NULL,
+                       password varchar(255) DEFAULT NULL,
+                       status varchar(255) DEFAULT NULL,
                        PRIMARY KEY (id)
 );
 
+
+CREATE TABLE files (
+                       id int NOT NULL AUTO_INCREMENT,
+                       location varchar(255) DEFAULT NULL,
+                       name varchar(255) DEFAULT NULL,
+                       status varchar(255) DEFAULT NULL,
+                       PRIMARY KEY (`id`)
+);
+
+
 CREATE TABLE events (
                          id int NOT NULL AUTO_INCREMENT,
-                         typeOfEvent varchar(100) DEFAULT NULL,
+                         event_date_time datetime(6) DEFAULT NULL,
                          file_id int DEFAULT NULL,
                          user_id int DEFAULT NULL,
+                         status varchar(255) DEFAULT NULL,
                          PRIMARY KEY (id),
                          UNIQUE KEY UK_file_id (file_id),
                          KEY `FK_user_id2users(id)` (user_id),

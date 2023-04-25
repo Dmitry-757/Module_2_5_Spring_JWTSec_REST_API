@@ -15,6 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    private String password;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Event> events;
@@ -23,11 +24,20 @@ public class User {
     @Value("Status.ACTIVE")
     private Status status;
 
+    @Enumerated(EnumType.STRING)
+    @Value("Role.ACTIVE")
+    private Role role;
+
     public User() {
     }
 
     public User(String name) {
         this.name = name;
+        this.events = new ArrayList<>();
+    }
+    public User(String name, String pass) {
+        this.name = name;
+        this.password = pass;
         this.events = new ArrayList<>();
     }
 

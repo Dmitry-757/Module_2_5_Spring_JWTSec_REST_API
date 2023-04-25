@@ -1,3 +1,3 @@
-INSERT INTO users (id, name)
-VALUES (1, 'user_1');
+INSERT INTO users (id, name, password, status)
+VALUES (1, 'user_1', 'pass123', 'ACTIVE');
 
