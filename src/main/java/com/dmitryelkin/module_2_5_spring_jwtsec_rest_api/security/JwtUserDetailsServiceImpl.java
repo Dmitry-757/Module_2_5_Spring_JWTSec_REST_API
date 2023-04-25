@@ -1,7 +1,7 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt.JwtUser;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt.JwtUserDetailsImpl;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt.JwtUserFactory;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class JwtUserDetailsService implements UserDetailsService {
+public class JwtUserDetailsServiceImpl implements UserDetailsService {
     private final UserServiceI userService;
 
     @Autowired
-    public JwtUserDetailsService(UserServiceI userService) {
+    public JwtUserDetailsServiceImpl(UserServiceI userService) {
         this.userService = userService;
     }
 
@@ -28,7 +28,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User with name "+username+" not found");
         }
 
-        JwtUser jwtUser = JwtUserFactory.create(user);
+        JwtUserDetailsImpl jwtUser = JwtUserFactory.create(user);
 
         return jwtUser;
     }
