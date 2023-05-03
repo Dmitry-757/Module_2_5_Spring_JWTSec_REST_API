@@ -1,4 +1,4 @@
-package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt;
+package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt_old;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,4 +1,4 @@
-package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt;
+package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt_old;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;

@@ -1,8 +1,6 @@
-package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security;
+package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt_old;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt.JwtUserDetailsImpl;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt.JwtUserFactory;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

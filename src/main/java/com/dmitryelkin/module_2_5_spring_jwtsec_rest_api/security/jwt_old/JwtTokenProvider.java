@@ -1,10 +1,9 @@
-package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt;
+package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt_old;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +23,6 @@ public class JwtTokenProvider {
 
     @Value("${jwt.token.secret}")
     private String secret;
-
     @Value("${jwt.token.expired}")
     private long validityInMilliseconds;
 
