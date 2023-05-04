@@ -10,6 +10,7 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.UserDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt_old.JwtAuthenticationException;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceI;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 
@@ -32,6 +34,12 @@ public class UserAuthenticationProvider {
     public UserAuthenticationProvider(PasswordEncoder passwordEncoder, UserServiceI userService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
+    }
+
+    @PostConstruct
+    protected void init() {
+        // this is to avoid having the raw secret key available in the JVM
+        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
     public Authentication validateCredentials(CredentialsDTO credentialsDto) {
@@ -54,12 +62,24 @@ public class UserAuthenticationProvider {
 //        String encodedUserPassword = passwordEncoder.encode(user.getPassword());
         String encodedUserPassword = user.getPassword();
         if (passwordEncoder.matches(dtoPassword, encodedUserPassword)){
-            return new UserDTO(user);
+            //return new UserDto(1L, "Sergio", "Lema", "login", "token");
+            return new UserDTO(user.getName(), createToken(user.getName()));
         }
 
         throw new RuntimeException("Invalid password");
     }
 
+    public String createToken(String userName) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + 3600000); // 1 hour
+
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        return JWT.create()
+                .withIssuer(userName)
+                .withIssuedAt(now)
+                .withExpiresAt(validity)
+                .sign(algorithm);
+    }
     public Authentication validateToken(String token) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
