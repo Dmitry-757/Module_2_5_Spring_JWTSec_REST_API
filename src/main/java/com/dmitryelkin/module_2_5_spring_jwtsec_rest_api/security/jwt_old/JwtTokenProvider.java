@@ -1,6 +1,7 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt_old;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.JwtAuthenticationException;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;

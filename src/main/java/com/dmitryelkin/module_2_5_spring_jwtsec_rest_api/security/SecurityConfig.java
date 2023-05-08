@@ -49,7 +49,7 @@ public SecurityConfig(UserAuthenticationProvider userAuthenticationProvider) {
 //                .requestMatchers("/").permitAll()
                 .requestMatchers("/","/api/v1/signIn/**").permitAll()
 
-                //"/api/v1/users/**"
+                //***** "/api/v1/users/**"
                 .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole(
                         Role.ADMIN.name(),
                         Role.MODERATOR.name(),
@@ -58,7 +58,7 @@ public SecurityConfig(UserAuthenticationProvider userAuthenticationProvider) {
                 .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasRole(Role.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole(Role.ADMIN.name())
 
-                //"/api/v1/events/**"
+                //***** "/api/v1/events/**"
                 .requestMatchers(HttpMethod.GET, "/api/v1/events/**").hasAnyRole(
                         Role.ADMIN.name(),
                         Role.MODERATOR.name(),
@@ -72,7 +72,7 @@ public SecurityConfig(UserAuthenticationProvider userAuthenticationProvider) {
                         Role.MODERATOR.name()
                 )
 
-                //"/api/v1/files/**"
+                //***** "/api/v1/files/**"
                 .requestMatchers(HttpMethod.GET, "/api/v1/files/**").hasAnyRole(
                         Role.ADMIN.name(),
                         Role.MODERATOR.name(),

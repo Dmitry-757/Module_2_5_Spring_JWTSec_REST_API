@@ -39,9 +39,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 try {
                     String token = authElements[1];
                     SecurityContextHolder.getContext().setAuthentication(
-                            userAuthenticationProvider.validateToken(token));
+                            userAuthenticationProvider.getAuthentication(token));
                 }
-                //**** DI ****
                 catch (JWTVerificationException e){
                     SecurityContextHolder.clearContext();
 
@@ -51,14 +50,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                     throw new JWTVerificationException("JWT token is expired or invalid");
                 }
-//                catch (JwtAuthenticationException e) {
-//                    SecurityContextHolder.clearContext();
-//                    ((HttpServletResponse) res).sendError(((HttpServletResponse) res).getStatus());
-//                    throw new JwtAuthenticationException("JWT token is expired or invalid");
-                //**********
 
                 catch (RuntimeException e) {
                     SecurityContextHolder.clearContext();
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+                    OBJECT_MAPPER.writeValue(response.getOutputStream(), new ErrorDto("JWT token is expired or invalid"));
+
                     throw e;
                 }
             }

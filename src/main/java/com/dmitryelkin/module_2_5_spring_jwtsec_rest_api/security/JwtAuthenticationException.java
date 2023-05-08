@@ -1,4 +1,4 @@
-package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security.jwt_old;
+package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security;
 
 import org.springframework.security.core.AuthenticationException;
 

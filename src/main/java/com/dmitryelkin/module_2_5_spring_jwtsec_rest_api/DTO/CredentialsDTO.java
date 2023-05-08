@@ -6,7 +6,6 @@ public class CredentialsDTO {
     private String password;
 
     public CredentialsDTO() {
-        super();
     }
 
     public CredentialsDTO(String login, String password) {

@@ -33,13 +33,14 @@ public class UserNamePasswordAuthFilter extends OncePerRequestFilter {
 
             try {
                 SecurityContextHolder.getContext().setAuthentication(
-                        userAuthenticationProvider.validateCredentials(credentialsDto));
+                        userAuthenticationProvider.getAuthentication(credentialsDto));
             } catch (RuntimeException e) {
                 SecurityContextHolder.clearContext();
 
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-                MAPPER.writeValue(response.getOutputStream(), new ErrorDto("Unauthorized path"));
+//                MAPPER.writeValue(response.getOutputStream(), new ErrorDto("Unauthorized path"));
+                MAPPER.writeValue(response.getOutputStream(), new ErrorDto(e.getMessage()));
 
                 throw e;
             }
