@@ -84,8 +84,10 @@ public SecurityConfig(UserAuthenticationProvider userAuthenticationProvider) {
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/files/**").hasAnyRole(
                         Role.ADMIN.name(),
                         Role.MODERATOR.name()
+                )
 
-                );
+                .anyRequest().authenticated()
+        ;
         return http.build();
     };
 
