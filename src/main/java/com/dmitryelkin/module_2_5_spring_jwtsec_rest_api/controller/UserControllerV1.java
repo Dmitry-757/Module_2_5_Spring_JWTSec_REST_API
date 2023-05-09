@@ -70,13 +70,13 @@ public class UserControllerV1 {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createItem(@RequestBody User item){
+    public ResponseEntity<User> createItem(@RequestBody User item){
         if (item != null){
             User newItem = service.create(item);
-            UserDTO dto = new UserDTO(newItem);
+//            UserDTO dto = new UserDTO(newItem);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(dto);
+                    .body(newItem);
         } else {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
@@ -84,13 +84,13 @@ public class UserControllerV1 {
         }
     }
     @PutMapping
-    public ResponseEntity<UserDTO> update(@RequestBody User item){
+    public ResponseEntity<User> update(@RequestBody User item){
         if (item != null && item.getId() != 0){
             User updatingItem = service.update(item);
-            UserDTO dto = new UserDTO(updatingItem);
+//            UserDTO dto = new UserDTO(updatingItem);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(dto);
+                    .body(updatingItem);
         } else {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
@@ -99,14 +99,14 @@ public class UserControllerV1 {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserDTO> delete(@PathVariable Long id){
+    public ResponseEntity<User> delete(@PathVariable Long id){
         if( id != null ) {
 
             User deletingItem = service.delete(id);
-            UserDTO dto = new UserDTO(deletingItem);
+//            UserDTO dto = new UserDTO(deletingItem);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(dto);
+                    .body(deletingItem);
         } else {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
