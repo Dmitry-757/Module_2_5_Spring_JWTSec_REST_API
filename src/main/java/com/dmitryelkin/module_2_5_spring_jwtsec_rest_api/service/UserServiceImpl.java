@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserServiceI{
 
     @Override
     public List<User> getAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override

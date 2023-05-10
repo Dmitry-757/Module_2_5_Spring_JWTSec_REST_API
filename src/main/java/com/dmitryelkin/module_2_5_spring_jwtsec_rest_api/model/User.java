@@ -25,7 +25,7 @@ public class User {
     private Status status;
 
     @Enumerated(EnumType.STRING)
-    @Value("Role.ACTIVE")
+    @Value("Role.USER")
     private Role role;
 
     public User() {
@@ -85,6 +85,7 @@ public class User {
     public Role getRole() {
         return role;
     }
+
 
     public void setRole(Role role) {
         this.role = role;

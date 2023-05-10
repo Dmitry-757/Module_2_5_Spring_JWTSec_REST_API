@@ -24,7 +24,7 @@ public class UserControllerV1 {
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAll(){
         List<User> users = service.getAll();
-        if(!users.isEmpty()) {
+        if((users != null) && (!users.isEmpty())) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(
