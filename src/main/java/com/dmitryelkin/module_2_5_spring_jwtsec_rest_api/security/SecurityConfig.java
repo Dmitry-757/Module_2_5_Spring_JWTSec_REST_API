@@ -16,22 +16,12 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 public class SecurityConfig {
 
-//    private final UserAuthenticationEntryPoint userAuthenticationEntryPoint;
     private final UserAuthenticationProvider userAuthenticationProvider;
 
-//    public SecurityConfig(UserAuthenticationEntryPoint userAuthenticationEntryPoint,
-//                          UserAuthenticationProvider userAuthenticationProvider) {
-//        this.userAuthenticationEntryPoint = userAuthenticationEntryPoint;
-//        this.userAuthenticationProvider = userAuthenticationProvider;
-//    }
 public SecurityConfig(UserAuthenticationProvider userAuthenticationProvider) {
     this.userAuthenticationProvider = userAuthenticationProvider;
 }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,12 +32,9 @@ public SecurityConfig(UserAuthenticationProvider userAuthenticationProvider) {
 //                .exceptionHandling().authenticationEntryPoint(userAuthenticationEntryPoint)
                 .addFilterBefore(new UserNamePasswordAuthFilter(userAuthenticationProvider), BasicAuthenticationFilter.class)//впендюриваем наш фильтр перед BasicAuthenticationFilter
                 .addFilterBefore(new JwtAuthFilter(userAuthenticationProvider), UserNamePasswordAuthFilter.class)//а этот перед UsernamePasswordAuthFilter
-//                .authorizeHttpRequests(request -> request
-//                        .requestMatchers(HttpMethod.POST,"/api/v1/signIn").permitAll()
-//                        .anyRequest().authenticated()
                 .authorizeHttpRequests()
-//                .requestMatchers("/").permitAll()
-                .requestMatchers("/","/api/v1/signIn/**").permitAll()
+                .requestMatchers(HttpMethod.POST,"/api/v1/auth/signIn/**").permitAll()
+//                .requestMatchers(HttpMethod.POST,"/**").permitAll()
 
                 //***** "/api/v1/users/**"
                 .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole(

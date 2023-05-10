@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,13 +36,13 @@ public class AuthenticationController {
     }
 
 
-    @PostMapping("signIn")
-    public ResponseEntity<UserDTO> signIn(CredentialsDTO credentialsDto){
+    @PostMapping("/signIn")
+    public ResponseEntity<?> signIn(@RequestBody CredentialsDTO credentialsDto){
         User user = userService.getByName(credentialsDto.getLogin());
         if (user == null){
             //throw new UsernameNotFoundException("Invalid login");
             SecurityContextHolder.clearContext();
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorDto("user was not found"));
         }
 
         String token = userAuthenticationProvider.createToken(user.getName());

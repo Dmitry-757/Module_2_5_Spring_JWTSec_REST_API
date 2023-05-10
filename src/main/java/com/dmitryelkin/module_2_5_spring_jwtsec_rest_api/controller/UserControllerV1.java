@@ -6,6 +6,7 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceImpl
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -70,6 +71,7 @@ public class UserControllerV1 {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<User> createItem(@RequestBody User item){
         if (item != null){
             User newItem = service.create(item);
@@ -84,6 +86,7 @@ public class UserControllerV1 {
         }
     }
     @PutMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<User> update(@RequestBody User item){
         if (item != null && item.getId() != 0){
             User updatingItem = service.update(item);
@@ -99,6 +102,7 @@ public class UserControllerV1 {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<User> delete(@PathVariable Long id){
         if( id != null ) {
 

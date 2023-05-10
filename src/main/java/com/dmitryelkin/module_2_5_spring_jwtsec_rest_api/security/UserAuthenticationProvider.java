@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -25,12 +26,13 @@ public class UserAuthenticationProvider {
     @Value("${jwt.token.secret}")
     private String secretKey;
 
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
     private final UserServiceI userService;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 
     @Autowired
-    public UserAuthenticationProvider(PasswordEncoder passwordEncoder, UserServiceI userService) {
-        this.passwordEncoder = passwordEncoder;
+    public UserAuthenticationProvider(UserServiceI userService) {
         this.userService = userService;
     }
 
@@ -49,8 +51,8 @@ public class UserAuthenticationProvider {
 
         String dtoPassword = credentialsDto.getPassword();
 
-//        String encodedUserPassword = passwordEncoder.encode(user.getPassword());
-        String encodedUserPassword = user.getPassword();
+        String encodedUserPassword = passwordEncoder.encode(user.getPassword());
+//        String encodedUserPassword = user.getPassword();
         if (passwordEncoder.matches(dtoPassword, encodedUserPassword)){
             UserDetails userDetails = JwtUserFactory.create(user);
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
