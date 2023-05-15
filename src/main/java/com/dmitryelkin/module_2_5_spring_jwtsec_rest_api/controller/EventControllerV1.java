@@ -1,8 +1,8 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.UserDTO;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceImpl;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.EventDTO;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Event;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,24 +12,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/users/" )
-public class UserControllerV1 {
-    private final UserServiceImpl service;
+@RequestMapping(value = "/api/v1/events/" )
+public class EventControllerV1 {
+    private final EventServiceImpl service;
 
     @Autowired
-    public UserControllerV1(UserServiceImpl service) {
+    public EventControllerV1(EventServiceImpl service) {
         this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAll(){
-        List<User> users = service.getAll();
-        if((users != null) && (!users.isEmpty())) {
+    public ResponseEntity<List<EventDTO>> getAll(){
+        List<Event> items = service.getAll();
+        if((items != null) && (!items.isEmpty())) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(
-                            users.stream()
-                                    .map(UserDTO::new)
+                            items.stream()
+                                    .map(EventDTO::new)
                                     .toList()
                     );
         } else{
@@ -39,26 +39,12 @@ public class UserControllerV1 {
 
         }
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable Long id){
-        User item;
-        if( (id != null) && ( (item = service.getById(id)) != null) ) {
-            UserDTO dto = new UserDTO(item);
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(dto);
-        } else{
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
 
-        }
-    }
-    @GetMapping("/{name}")
-    public ResponseEntity<UserDTO> getByName(@PathVariable String name){
-        User item = service.getByName(name);
-        if(item != null) {
-            UserDTO dto = new UserDTO(item);
+    @GetMapping("/{id}")
+    public ResponseEntity<EventDTO> getById(@PathVariable Long id){
+        Event item;
+        if( (id != null) && ( (item = service.getById(id)) != null) ) {
+            EventDTO dto = new EventDTO(item);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(dto);
@@ -72,10 +58,9 @@ public class UserControllerV1 {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<User> createItem(@RequestBody User item){
+    public ResponseEntity<Event> createItem(@RequestBody Event item){
         if (item != null){
-            User newItem = service.create(item);
-//            UserDTO dto = new UserDTO(newItem);
+            Event newItem = service.create(item);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(newItem);
@@ -85,11 +70,12 @@ public class UserControllerV1 {
                     .build();
         }
     }
+
     @PutMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<User> update(@RequestBody User item){
+    public ResponseEntity<Event> update(@RequestBody Event item){
         if (item != null && item.getId() != 0){
-            User updatingItem = service.update(item);
+            Event updatingItem = service.update(item);
 //            UserDTO dto = new UserDTO(updatingItem);
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -103,11 +89,10 @@ public class UserControllerV1 {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<User> delete(@PathVariable Long id){
+    public ResponseEntity<Event> delete(@PathVariable Long id){
         if( id != null ) {
 
-            User deletingItem = service.delete(id);
-//            UserDTO dto = new UserDTO(deletingItem);
+            Event deletingItem = service.delete(id);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(deletingItem);

@@ -1,53 +1,79 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.*;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.FileRepositoryI;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class FileServiceImpl implements FileServiceI {
-    private final FileRepositoryI repository;
+    private final AmazonS3 s3client;
+    @Value("${aws.bucketName}")
+    private String bucketName;
 
     @Autowired
-    public FileServiceImpl(FileRepositoryI service) {
-        this.repository = service;
+    public FileServiceImpl(AmazonS3 s3client) {
+        this.s3client = s3client;
     }
 
-    @Override
-    public File create(File item) {
-        return repository.saveAndFlush(item);
-    }
 
-    @Override
-    public File update(File item) {
-        return repository.saveAndFlush(item);
-    }
+    public void createBucket() {
 
-    @Override
-    public File delete(long id) {
-        File item = repository.findById(id).orElse(null);
-        if (item!=null){
-            item.setStatus(Status.DELETED);
-            repository.saveAndFlush(item);
+        if (s3client.doesBucketExistV2(bucketName)) {
+            log.info("Bucket {} already exists, use a different name", bucketName);
+            return;
         }
-        return item;
-   }
 
-    @Override
-    public List<File> getAll() {
-        return repository.findAll();
+        s3client.createBucket(bucketName);
+    }
+
+    public void listBuckets() {
+        List<Bucket> buckets = s3client.listBuckets();
+        log.info("buckets: ", buckets);
     }
 
     @Override
-    public File getById(long id) {
-        return repository.findById(id).orElse(null);
+    public void upload(File file) {
+        java.io.File uploadingFile = new java.io.File(file.getLocation());
+        try {
+            s3client.putObject(
+                    bucketName,
+                    file.getName(),
+                    uploadingFile);
+        } catch (Exception e) {
+            log.info("error: ", e.getMessage());
+        }
     }
 
     @Override
-    public File getByName(String name) {
-        return repository.findByName(name).orElse(null);
+    public List<String> getAll() {
+        ObjectListing objects = s3client.listObjects(bucketName);
+        List<String> result = new ArrayList<>();
+        for (S3ObjectSummary objectSummary : objects.getObjectSummaries()) {
+            result.add(objectSummary.getKey());
+            log.info("File name: ", objectSummary.getKey());
+        }
+
+        return result;
+    }
+
+    @Override
+    public InputStream download(String name) {
+        S3Object s3object = s3client.getObject(bucketName, "proselyte.txt");
+        S3ObjectInputStream inputStream = s3object.getObjectContent();
+//        java.io.File file = new File("<PUT_DESIRED_PATH_HERE>");
+//        FileCopyUtils.copy(inputStream, new FileOutputStream(file));
+        return inputStream;
+    }
+
+    @Override
+    public void delete(String name) {
+
     }
 }
