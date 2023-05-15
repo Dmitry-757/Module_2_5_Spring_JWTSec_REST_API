@@ -65,8 +65,11 @@ public class FileServiceImpl implements FileServiceI {
 
     @Override
     public InputStream download(String name) {
-        S3Object s3object = s3client.getObject(bucketName, "proselyte.txt");
-        S3ObjectInputStream inputStream = s3object.getObjectContent();
+        S3ObjectInputStream inputStream = null;
+        if (s3client.doesObjectExist(bucketName, name)){
+            S3Object s3object = s3client.getObject(bucketName, name);
+            inputStream = s3object.getObjectContent();
+        }
 //        java.io.File file = new File("<PUT_DESIRED_PATH_HERE>");
 //        FileCopyUtils.copy(inputStream, new FileOutputStream(file));
         return inputStream;
