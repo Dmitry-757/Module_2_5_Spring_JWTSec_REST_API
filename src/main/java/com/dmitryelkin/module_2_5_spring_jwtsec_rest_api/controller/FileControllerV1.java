@@ -1,5 +1,6 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.FileServiceI;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.FileServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -13,15 +14,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.InputStream;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/files/")
 public class FileControllerV1 {
-    private final FileServiceImpl service;
+    private final FileServiceI service;
 
     @Autowired
-    public FileControllerV1(FileServiceImpl service) {
+    public FileControllerV1(FileServiceI service) {
         this.service = service;
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAll(){
+        List<String> fileList = service.getAll();
+        if (!fileList.isEmpty()){
+            return ResponseEntity.ok()
+                    .body(fileList);
+        } else{
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Files not found");
+        }
     }
 
     @GetMapping("/{fileName}")
@@ -43,4 +58,6 @@ public class FileControllerV1 {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }
+
+
 }
