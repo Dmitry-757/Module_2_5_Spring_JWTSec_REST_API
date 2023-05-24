@@ -3,7 +3,6 @@ package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.AWSS3.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ import java.util.List;
 @Service
 public class FileServiceImpl implements FileServiceI {
     private final AmazonS3 s3client;
-    private final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(S3Service.class);
+    private final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(FileServiceImpl.class);
     @Value("${aws.bucketName}")
     private String bucketName;
 
