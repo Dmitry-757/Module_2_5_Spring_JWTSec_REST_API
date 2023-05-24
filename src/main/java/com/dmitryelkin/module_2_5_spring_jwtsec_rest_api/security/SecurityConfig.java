@@ -35,8 +35,6 @@ public SecurityConfig(UserAuthenticationProvider userAuthenticationProvider) {
 //                .requestMatchers(HttpMethod.POST,"/**").permitAll()
 
                 //***** "/api/v1/users/**"
-//                .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
-                //.hasRole("MODERATOR")
                 .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole(
                         Role.ADMIN.name(),
                         Role.MODERATOR.name(),
