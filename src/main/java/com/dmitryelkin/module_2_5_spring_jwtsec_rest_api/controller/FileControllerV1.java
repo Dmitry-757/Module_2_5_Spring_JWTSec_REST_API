@@ -1,18 +1,16 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.FileServiceI;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.FileServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -57,6 +55,34 @@ public class FileControllerV1 {
 //                    .contentLength(file.length())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
+    }
+
+    @PostMapping(value = "/{fileName}"
+//            ,consumes = MediaType.MULTIPART_FORM_DATA
+    )
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file){
+
+        try {
+            service.upload(file);
+            return ResponseEntity.ok()
+                    .body("File uploaded");
+        } catch (IOException e) {
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
+        }
+
+    }
+
+    @DeleteMapping("/{fileName}")
+    public ResponseEntity<?> delete(@PathVariable String fileName) {
+        if (fileName == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("File not found");
+        }
+        service.delete(fileName);
+        return ResponseEntity.ok()
+                .body("File deleted");
     }
 
 

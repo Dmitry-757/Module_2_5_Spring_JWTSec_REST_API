@@ -7,7 +7,9 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.AWSS3.S3Service
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,18 +43,12 @@ public class FileServiceImpl implements FileServiceI {
     }
 
     @Override
-    public void upload(File file) {
-//        String path = "d://uploadingFile.txt";
-        String path = file.getLocation();
-                java.io.File uploadingFile = new java.io.File(path);
-        try {
+    public void upload(MultipartFile file) throws IOException {
+            java.io.File uploadingFile = file.getResource().getFile();
             s3client.putObject(
                     bucketName,
                     file.getName(),
                     uploadingFile);
-        } catch (Exception e) {
-            log.info("error: ", e.getMessage());
-        }
     }
 
     @Override
