@@ -75,7 +75,6 @@ public class UserControllerV1 {
     public ResponseEntity<User> createItem(@RequestBody User item){
         if (item != null){
             User newItem = service.create(item);
-//            UserDTO dto = new UserDTO(newItem);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(newItem);
@@ -90,7 +89,6 @@ public class UserControllerV1 {
     public ResponseEntity<User> update(@RequestBody User item){
         if (item != null && item.getId() != 0){
             User updatingItem = service.update(item);
-//            UserDTO dto = new UserDTO(updatingItem);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(updatingItem);
@@ -107,7 +105,6 @@ public class UserControllerV1 {
         if( id != null ) {
 
             User deletingItem = service.delete(id);
-//            UserDTO dto = new UserDTO(deletingItem);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(deletingItem);

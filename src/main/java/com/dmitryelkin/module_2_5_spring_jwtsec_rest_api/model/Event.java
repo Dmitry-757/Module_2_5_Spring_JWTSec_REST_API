@@ -1,12 +1,20 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+
+@Data
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "events")
 public class Event {
@@ -32,69 +40,17 @@ public class Event {
         this.eventDateTime = LocalDateTime.now();
     }
 
-    public Event(User user, File file) {
-        this.user = user;
-        this.file = file;
-        this.eventDateTime = LocalDateTime.now();
-    }
 
-    public Event(long id, LocalDateTime eventDateTime, User user, File file) {
-        this.id = id;
-        this.eventDateTime = eventDateTime;
-        this.user = user;
-        this.file = file;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getEventDateTime() {
-        return eventDateTime;
-    }
-
-    public void setEventDateTime(LocalDateTime eventDateTime) {
-        this.eventDateTime = eventDateTime;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return id == event.id && user.equals(event.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, user);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Event event = (Event) o;
+//        return id == event.id && user.equals(event.user);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id, user);
+//    }
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/events/" )
+@RequestMapping(value = "/api/v1/events/")
 public class EventControllerV1 {
     private final EventServiceImpl service;
 
@@ -22,9 +22,9 @@ public class EventControllerV1 {
     }
 
     @GetMapping
-    public ResponseEntity<List<EventDTO>> getAll(){
+    public ResponseEntity<List<EventDTO>> getAll() {
         List<Event> items = service.getAll();
-        if((items != null) && (!items.isEmpty())) {
+        if ((items != null) && (!items.isEmpty())) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(
@@ -32,7 +32,7 @@ public class EventControllerV1 {
                                     .map(EventDTO::new)
                                     .toList()
                     );
-        } else{
+        } else {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
                     .build();
@@ -41,56 +41,52 @@ public class EventControllerV1 {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventDTO> getById(@PathVariable Long id){
+    public ResponseEntity<EventDTO> getById(@PathVariable Long id) {
         Event item;
-        if( (id != null) && ( (item = service.getById(id)) != null) ) {
+        if ((id != null) && ((item = service.getById(id)) != null)) {
             EventDTO dto = new EventDTO(item);
+            return ResponseEntity.ok(dto);
+        } else {
             return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(dto);
-        } else{
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .noContent()
                     .build();
-
         }
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Event> createItem(@RequestBody Event item){
-        if (item != null){
+    public ResponseEntity<Event> createItem(@RequestBody Event item) {
+        if (item != null) {
             Event newItem = service.create(item);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(newItem);
         } else {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .noContent()
                     .build();
         }
     }
 
     @PutMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Event> update(@RequestBody Event item){
-        if (item != null && item.getId() != 0){
+    public ResponseEntity<Event> update(@RequestBody Event item) {
+        if (item != null && item.getId() != 0) {
             Event updatingItem = service.update(item);
-//            UserDTO dto = new UserDTO(updatingItem);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(updatingItem);
         } else {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .noContent()
                     .build();
         }
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Event> delete(@PathVariable Long id){
-        if( id != null ) {
+    public ResponseEntity<Event> delete(@PathVariable Long id) {
+        if (id != null) {
 
             Event deletingItem = service.delete(id);
             return ResponseEntity
@@ -102,7 +98,6 @@ public class EventControllerV1 {
                     .build();
         }
     }
-
 
 
 }

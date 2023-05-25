@@ -41,7 +41,6 @@ public class FileControllerV1 {
     public ResponseEntity<?> getFilesByName(@PathVariable String fileName) {
         InputStream inputStream = service.download(fileName);
         if (inputStream == null) {
-//            throw new FileNotFoundException("Can't get file");
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("File not found");
@@ -52,7 +51,6 @@ public class FileControllerV1 {
 
         return ResponseEntity.ok()
                     .headers(headers)
-//                    .contentLength(file.length())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }

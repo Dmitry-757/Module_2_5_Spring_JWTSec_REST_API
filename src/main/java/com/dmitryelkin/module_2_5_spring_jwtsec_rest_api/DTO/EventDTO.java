@@ -7,19 +7,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
+
 public class EventDTO {
     private final long id;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private final LocalDateTime eventDateTime;
     private final User user;
     private final File file;
-
-//    public EventDTO() {
-//        this.id = id;
-//        this.eventDateTime = eventDateTime;
-//        this.user = user;
-//        this.file = file;
-//    }
 
 
     public EventDTO(Event item) {
@@ -29,7 +23,7 @@ public class EventDTO {
         this.file = item.getFile();
     }
 
-    public Event getEvent(){
-        return new Event(id, eventDateTime, user, file);
-    }
+//    public Event getEvent(){
+//        return new Event(id, eventDateTime, user, file);
+//    }
 }

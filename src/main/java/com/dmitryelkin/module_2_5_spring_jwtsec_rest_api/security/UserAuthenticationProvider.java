@@ -9,6 +9,7 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.CredentialsDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceI;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,12 +22,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Slf4j
 @Component
 public class UserAuthenticationProvider {
     @Value("${jwt.token.secret}")
     private String secretKey;
 
-//    private final PasswordEncoder passwordEncoder;
+    @Value("${jwt.token.expiredPeriod}")
+    private long expiredPeriod;
+
     private final UserServiceI userService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -46,6 +50,7 @@ public class UserAuthenticationProvider {
     public Authentication getAuthentication(CredentialsDTO credentialsDto) {
         User user = userService.getByName(credentialsDto.getLogin());
         if (user == null){
+            log.info("Invalid login in credentialsDto");
             throw new UsernameNotFoundException("Invalid login");
         }
 
@@ -57,6 +62,7 @@ public class UserAuthenticationProvider {
             UserDetails userDetails = JwtUserFactory.create(user);
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         }
+        log.info("Invalid password in credentialsDto");
         throw new RuntimeException("Invalid password");
     }
 
@@ -70,7 +76,8 @@ public class UserAuthenticationProvider {
             DecodedJWT decoded = verifier.verify(token);
 
             if (decoded.getExpiresAt().before(new Date())) {
-                throw new JwtAuthenticationException("JWT token is expired or invalid");
+                log.info("JWT token is expired");
+                throw new JwtAuthenticationException("JWT token is expired");
             }
 
             User user = userService.getByName(decoded.getIssuer());
@@ -80,6 +87,7 @@ public class UserAuthenticationProvider {
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
         } catch (JWTVerificationException e){
+            log.info("JWT token is expired or invalid");
             throw new JwtAuthenticationException("JWT token is expired or invalid");
         }
     }
@@ -87,7 +95,7 @@ public class UserAuthenticationProvider {
 
     public String createToken(String userName) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + 3600000); // 1 hour
+        Date validity = new Date(now.getTime() + expiredPeriod); // 1 hour
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()

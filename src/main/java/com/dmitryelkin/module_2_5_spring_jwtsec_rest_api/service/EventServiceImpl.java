@@ -40,7 +40,7 @@ public class EventServiceImpl implements EventServiceI{
 
     @Override
     public List<Event> getAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
