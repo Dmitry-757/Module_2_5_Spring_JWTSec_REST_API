@@ -1,6 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.0.5'
+//    id 'org.springframework.boot' version '3.0.5'
+    id("org.springframework.boot") version "3.1.0"
     id 'io.spring.dependency-management' version '1.1.0'
 }
 
@@ -18,9 +19,13 @@ ext{
     jjwtVersion = '0.2'
     javaJwtVersion = '4.4.0'
     lombokVersion = '1.18.26'
+//    springBootVersion = '3.1.0'
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-gradle-plugin
+//    implementation group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${springBootVersion}"
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
