@@ -24,60 +24,55 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> {
-                    csrf.disable();
-                })
-                .sessionManagement(sessionManagement -> {
-                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(sessionManagement ->
+                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) )
                 .addFilterBefore(new UserNamePasswordAuthFilter(userAuthenticationProvider), BasicAuthenticationFilter.class)//впендюриваем наш фильтр перед BasicAuthenticationFilter
                 .addFilterBefore(new JwtAuthFilter(userAuthenticationProvider), UserNamePasswordAuthFilter.class)//а этот перед UsernamePasswordAuthFilter
-                .authorizeHttpRequests(authorizeHttpRequests -> {
-                    authorizeHttpRequests
-                            .requestMatchers(HttpMethod.POST, "/api/v1/auth/signIn/**").permitAll()
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/signIn/**").permitAll()
 
-                            //***** "/api/v1/users/**"
-                            .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole(
-                                    Role.ADMIN.name(),
-                                    Role.MODERATOR.name(),
-                                    Role.USER.name())
-                            .requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasRole(Role.ADMIN.name())
-                            .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasRole(Role.ADMIN.name())
-                            .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole(
+                                Role.ADMIN.name(),
+                                Role.MODERATOR.name(),
+                                Role.USER.name()
+                        )
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole(Role.ADMIN.name())
 
-                            //***** "/api/v1/events/**"
-                            .requestMatchers(HttpMethod.GET, "/api/v1/events/**").hasAnyRole(
-                                    Role.ADMIN.name(),
-                                    Role.MODERATOR.name(),
-                                    Role.USER.name())
-                            .requestMatchers(HttpMethod.POST, "/api/v1/events/**").hasRole(Role.ADMIN.name())
-                            .requestMatchers(HttpMethod.PUT, "/api/v1/events/**").hasAnyRole(
-                                    Role.ADMIN.name(),
-                                    Role.MODERATOR.name())
-                            .requestMatchers(HttpMethod.DELETE, "/api/v1/events/**").hasAnyRole(
-                                    Role.ADMIN.name(),
-                                    Role.MODERATOR.name()
-                            )
+                        .requestMatchers(HttpMethod.GET, "/api/v1/events/**").hasAnyRole(
+                                Role.ADMIN.name(),
+                                Role.MODERATOR.name(),
+                                Role.USER.name()
+                        )
+                        .requestMatchers(HttpMethod.POST, "/api/v1/events/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/events/**").hasAnyRole(
+                                Role.ADMIN.name(),
+                                Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/events/**").hasAnyRole(
+                                Role.ADMIN.name(),
+                                Role.MODERATOR.name()
+                        )
 
-                            //***** "/api/v1/files/**"
-                            .requestMatchers(HttpMethod.GET, "/api/v1/files/**").hasAnyRole(
-                                    Role.ADMIN.name(),
-                                    Role.MODERATOR.name(),
-                                    Role.USER.name())
-                            .requestMatchers(HttpMethod.POST, "/api/v1/files/**").hasRole(Role.ADMIN.name())
-                            .requestMatchers(HttpMethod.PUT, "/api/v1/files/**").hasAnyRole(
-                                    Role.ADMIN.name(),
-                                    Role.MODERATOR.name())
-                            .requestMatchers(HttpMethod.DELETE, "/api/v1/files/**").hasAnyRole(
-                                    Role.ADMIN.name(),
-                                    Role.MODERATOR.name()
-                            )
-                            .anyRequest().authenticated();
-                })
+                        .requestMatchers(HttpMethod.GET, "/api/v1/files/**").hasAnyRole(
+                                Role.ADMIN.name(),
+                                Role.MODERATOR.name(),
+                                Role.USER.name()
+                        )
+                        .requestMatchers(HttpMethod.POST, "/api/v1/files/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/files/**").hasAnyRole(
+                                Role.ADMIN.name(),
+                                Role.MODERATOR.name()
+                        )
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/files/**").hasAnyRole(
+                                Role.ADMIN.name(),
+                                Role.MODERATOR.name()
+                        )
+
+                        .anyRequest().authenticated())
         ;
         return http.build();
     }
-
-    ;
 
 }
