@@ -40,7 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     && "Bearer".equals(authElements[0])) {
                 try {
                     String token = authElements[1];
-                    Authentication authentication = userAuthenticationProvider.getAuthentication(token);
+                    Authentication authentication = userAuthenticationProvider.authenticate(token);
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }

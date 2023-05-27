@@ -47,7 +47,7 @@ public class UserAuthenticationProvider {
     }
 
     // validate credentials
-    public Authentication getAuthentication(CredentialsDTO credentialsDto) {
+    public Authentication authenticate(CredentialsDTO credentialsDto) {
         User user = userService.getByName(credentialsDto.getLogin());
         if (user == null){
             log.info("Invalid login in credentialsDto");
@@ -67,7 +67,7 @@ public class UserAuthenticationProvider {
     }
 
     // validate token
-    public Authentication getAuthentication(String token) {
+    public Authentication authenticate(String token) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         JWTVerifier verifier = JWT.require(algorithm)

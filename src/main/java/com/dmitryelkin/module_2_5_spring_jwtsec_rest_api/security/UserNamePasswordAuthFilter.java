@@ -33,7 +33,7 @@ public class UserNamePasswordAuthFilter extends OncePerRequestFilter {
             CredentialsDTO credentialsDto = MAPPER.readValue(request.getInputStream(), CredentialsDTO.class);
 
             try {
-                Authentication authentication = userAuthenticationProvider.getAuthentication(credentialsDto);
+                Authentication authentication = userAuthenticationProvider.authenticate(credentialsDto);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (RuntimeException e) {
