@@ -44,7 +44,8 @@ dependencies {
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: "${jjwtVersion}"
     implementation group: 'com.auth0', name: 'java-jwt', version: "${javaJwtVersion}"
 
-    implementation "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
 
 tasks.named('test') {

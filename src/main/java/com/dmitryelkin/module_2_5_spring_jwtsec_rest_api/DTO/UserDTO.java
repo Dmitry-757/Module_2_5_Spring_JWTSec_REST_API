@@ -1,7 +1,9 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
+import lombok.Getter;
 
+@Getter
 public class UserDTO {
     private final String name;
 
@@ -25,9 +27,9 @@ public class UserDTO {
 //    }
 
 
-    public String getName() {
-        return name;
-    }
+//    public String getName() {
+//        return name;
+//    }
 
 //    public String getToken() {
 //        return token;
