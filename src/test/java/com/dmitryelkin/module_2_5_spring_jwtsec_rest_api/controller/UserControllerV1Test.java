@@ -2,26 +2,35 @@ package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.UserDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.UserRepositoryI;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerV1Test {
-    @Mock
-    UserServiceImpl service;
+//    @Mock
+//    UserRepositoryI repository;
+//    @InjectMocks
+//    UserServiceImpl service;
 
-    @InjectMocks
-    UserControllerV1 controller;
+    UserRepositoryI repository = Mockito.mock(UserRepositoryI.class);
+    UserServiceImpl service = new UserServiceImpl(repository);
+
+
+
+//    @Mock
+//    UserServiceImpl service;
+//
+    UserControllerV1 controller = new UserControllerV1(service);
 
 
     @Test
@@ -35,7 +44,8 @@ class UserControllerV1Test {
         var userDtos = users.stream()
                 .map(u->(new UserDTO(u.getName())))
                 .toList();
-        Mockito.doReturn(users).when(this.service).getAll();
+//        Mockito.doReturn(users).when(this.service).getAll();
+        Mockito.doReturn(users).when(this.repository).findAll();
 
         // when
         var responseEntity = this.controller.getAll();
