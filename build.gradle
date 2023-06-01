@@ -34,7 +34,8 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation "mysql:mysql-connector-java:${mySQLConnectorVersion}"
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '3.1.0'
 
     implementation "com.amazonaws:aws-java-sdk:${awsJavaSdkVersion}"
 
