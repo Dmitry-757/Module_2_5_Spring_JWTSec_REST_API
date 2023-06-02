@@ -19,7 +19,9 @@ ext{
     jjwtVersion = '0.2'
     javaJwtVersion = '4.4.0'
     lombokVersion = '1.18.26'
-//    springBootVersion = '3.1.0'
+    springBootVersion = '3.1.0'
+    springSecirityVersion = '6.1.0'
+
 }
 
 dependencies {
@@ -35,7 +37,10 @@ dependencies {
     implementation "mysql:mysql-connector-java:${mySQLConnectorVersion}"
 
 //    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '3.1.0'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: "${springBootVersion}"
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: "${springSecirityVersion}"
+
 
     implementation "com.amazonaws:aws-java-sdk:${awsJavaSdkVersion}"
 

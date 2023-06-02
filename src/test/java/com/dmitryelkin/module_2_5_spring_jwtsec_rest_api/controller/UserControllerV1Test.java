@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -48,6 +49,7 @@ class UserControllerV1Test {
     }
 
     @Test
+    @WithMockUser(authorities="ADMIN")
     public void getAllUsers_whenMockMVC_thenVerifyResponse() throws Exception {
 
         var users = List.of(
