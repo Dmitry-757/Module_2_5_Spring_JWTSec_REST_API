@@ -23,6 +23,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 //@ExtendWith(MockitoExtension.class)
@@ -33,23 +34,24 @@ class UserControllerV1Test {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    UserRepositoryI repository;
+    UserRepositoryI mockRepository;
 
 //    @Mock
 //    UserRepositoryI repository;
 //    @InjectMocks
 //    UserServiceImpl service;
 
-    UserServiceImpl service = new UserServiceImpl(repository);
-    UserControllerV1 controller = new UserControllerV1(service);
+//    UserServiceImpl service = new UserServiceImpl(mockRepository);
+//    UserControllerV1 controller = new UserControllerV1(service);
 
     @BeforeEach
     void setup(){
-        repository.deleteAll();
+        mockRepository.deleteAll();
     }
 
     @Test
-    @WithMockUser(authorities="ADMIN")
+//    @WithMockUser(authorities="ADMIN")
+    @WithMockUser(value = "user1Name", password = "123")
     public void getAllUsers_whenMockMVC_thenVerifyResponse() throws Exception {
 
         var users = List.of(
@@ -58,7 +60,8 @@ class UserControllerV1Test {
                 new User("user3Name","213")
         );
 
-        repository.saveAll(users);
+//        mockRepository.saveAll(users);
+        given(this.mockRepository.findAll()).willReturn(users);
 
 //        ResultActions response = mockMvc.perform(get("/api/employees"));
 
@@ -72,8 +75,8 @@ class UserControllerV1Test {
     @Test
     void getAllUsers_ReturnsValidResponseEntity() {
 
-        UserRepositoryI repository2 = Mockito.mock(UserRepositoryI.class);
-        UserServiceImpl service = new UserServiceImpl(repository2);
+        UserRepositoryI repository = Mockito.mock(UserRepositoryI.class);
+        UserServiceImpl service = new UserServiceImpl(repository);
         UserControllerV1 controller = new UserControllerV1(service);
 
         // given
@@ -86,7 +89,7 @@ class UserControllerV1Test {
                 .map(u->(new UserDTO(u.getName())))
                 .toList();
 //        Mockito.doReturn(users).when(this.service).getAll();
-        Mockito.doReturn(users).when(repository2).findAll();
+        Mockito.doReturn(users).when(repository).findAll();
 
         // when
         var responseEntity = controller.getAll();
