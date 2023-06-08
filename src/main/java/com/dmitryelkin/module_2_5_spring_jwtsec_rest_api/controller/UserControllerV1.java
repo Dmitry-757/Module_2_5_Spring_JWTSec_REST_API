@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(value = "/api/v1/users/" )
@@ -28,22 +25,6 @@ public class UserControllerV1 {
     public ResponseEntity<List<UserDTO>> getAll(){
         List<User> users = service.getAll();
         if((users != null) && (!users.isEmpty())) {
-
-//            UserDTO udto = new UserDTO("test1");
-//
-//            var list = users.stream()
-//                    .map(u -> (new UserDTO(u.getName())))
-//                    .toList();
-
-//            Stream<User> uStream = users.stream();
-//            Stream<UserDTO> dtoStream = uStream.map(u->{
-//                System.out.println(u.getName());
-//                return new UserDTO(u.getName());
-//            });
-//            List<UserDTO> lDto = new ArrayList<>();
-//            for (User u:users){
-//                lDto.add(new UserDTO(u));
-//            }
 
             return ResponseEntity
                     .status(HttpStatus.OK)

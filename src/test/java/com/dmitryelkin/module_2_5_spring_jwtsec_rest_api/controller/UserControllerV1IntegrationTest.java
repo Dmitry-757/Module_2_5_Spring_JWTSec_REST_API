@@ -24,12 +24,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 //@ExtendWith(MockitoExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-class UserControllerV1Test {
+class UserControllerV1IntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -67,7 +68,15 @@ class UserControllerV1Test {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$[0].name", Matchers.is("user1Name")));
+                .andExpect(jsonPath("$[0].name", Matchers.is("user1Name")))
+                .andExpect(content().json("""
+               [        
+                        {"name":"user1Name","token":null},
+                        {"name":"user2Name","token":null},
+                        {"name":"user3Name","token":null}
+               ]
+            """))
+        ;
 //                .andExpect(jsonPath("$[0].cartItems.length()", Matchers.is(1)))
 //                .andExpect(jsonPath("$[0].cartItems[0].item.name", Matchers.is("MacBook")))
     }
