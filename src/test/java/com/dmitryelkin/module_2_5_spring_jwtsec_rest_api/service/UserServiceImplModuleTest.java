@@ -6,6 +6,7 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.UserRepositoryI;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,17 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplModuleTest {
 
-//    @Mock
-//    private UserRepositoryI repository = Mockito.mock(UserRepositoryI.class);
+    @Mock
+    private UserRepositoryI repository = Mockito.mock(UserRepositoryI.class);
 
-//    @InjectMocks
-//    private final UserServiceImpl service = new UserServiceImpl(repository);
+    @InjectMocks
+    private UserServiceImpl service;
 
     @Test
     void create() {
 
-        UserRepositoryI repository = Mockito.mock(UserRepositoryI.class);
-        UserServiceImpl service = new UserServiceImpl(repository);
+//        UserRepositoryI repository = Mockito.mock(UserRepositoryI.class);
+//        UserServiceImpl service = new UserServiceImpl(repository);
 
         // given
         User newUser1 = new User("userName1", "pass1");
