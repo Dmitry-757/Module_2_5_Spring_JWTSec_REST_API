@@ -4,7 +4,6 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.UserRepositoryI;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplModuleTest {
