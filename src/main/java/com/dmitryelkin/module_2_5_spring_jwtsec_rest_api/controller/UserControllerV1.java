@@ -40,6 +40,7 @@ public class UserControllerV1 {
 
         }
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getById(@PathVariable Long id){
         User item;
@@ -55,21 +56,36 @@ public class UserControllerV1 {
 
         }
     }
-    @GetMapping("/{name}")
-    public ResponseEntity<UserDTO> getByName(@PathVariable String name){
-        User item = service.getByName(name);
-        if(item != null) {
-            UserDTO dto = new UserDTO(item);
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(dto);
-        } else{
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
+//    @GetMapping("/{name}")
+//    public ResponseEntity<UserDTO> getByName(@PathVariable String name){
+//        User item = service.getByName(name);
+//        if(item != null) {
+//            UserDTO dto = new UserDTO(item);
+//            return ResponseEntity
+//                    .status(HttpStatus.OK)
+//                    .body(dto);
+//        } else{
+//            return ResponseEntity
+//                    .status(HttpStatus.NO_CONTENT)
+//                    .build();
+//
+//        }
+//    }
+@GetMapping()
+public ResponseEntity<UserDTO> getByName(@RequestParam(name = "name") String name){
+    User item = service.getByName(name);
+    if(item != null) {
+        UserDTO dto = new UserDTO(item);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(dto);
+    } else{
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
 
-        }
     }
+}
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")

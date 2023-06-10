@@ -2,6 +2,8 @@ package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.UserDTO;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.UserRepositoryI;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceImpl;
@@ -20,7 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -86,7 +90,6 @@ class UserControllerV1IntegrationTest {
         var userDtos = users.stream()
                 .map(u->(new UserDTO(u.getName())))
                 .toList();
-//        Mockito.doReturn(users).when(this.service).getAll();
         Mockito.doReturn(users).when(repository).findAll();
 
         // when
@@ -99,8 +102,18 @@ class UserControllerV1IntegrationTest {
     }
 
     @Test
-    void getById() {
+    @WithMockUser(value = "user1Name", password = "123")
+    void getById_ReturnsValidResponseEntity() throws Exception {
+        // given
+        User user = new User(123L,"user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
+        Mockito.doReturn(Optional.of(user)).when(mockRepository).findById(123L);
 
+        // when & then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/123"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(content().json("""
+                        {"name":"user1Name","token":null}
+            """));
 
     }
 
