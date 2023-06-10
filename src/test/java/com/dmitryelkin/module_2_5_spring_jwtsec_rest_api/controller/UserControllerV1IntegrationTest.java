@@ -8,6 +8,7 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceImpl
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,14 +38,6 @@ class UserControllerV1IntegrationTest {
     @MockBean
     UserRepositoryI mockRepository;
 
-//    @Mock
-//    UserRepositoryI repository;
-//    @InjectMocks
-//    UserServiceImpl service;
-
-//    UserServiceImpl service = new UserServiceImpl(mockRepository);
-//    UserControllerV1 controller = new UserControllerV1(service);
-
     @BeforeEach
     void setup(){
         mockRepository.deleteAll();
@@ -61,10 +54,8 @@ class UserControllerV1IntegrationTest {
                 new User("user3Name","213")
         );
 
-//        mockRepository.saveAll(users);
-        given(this.mockRepository.findAll()).willReturn(users);
-
-//        ResultActions response = mockMvc.perform(get("/api/employees"));
+//        BDDMockito.given(this.mockRepository.findAll()).willReturn(users);
+        Mockito.doReturn(users).when(mockRepository).findAll();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -77,8 +68,6 @@ class UserControllerV1IntegrationTest {
                ]
             """))
         ;
-//                .andExpect(jsonPath("$[0].cartItems.length()", Matchers.is(1)))
-//                .andExpect(jsonPath("$[0].cartItems[0].item.name", Matchers.is("MacBook")))
     }
 
     @Test
@@ -111,6 +100,8 @@ class UserControllerV1IntegrationTest {
 
     @Test
     void getById() {
+
+
     }
 
     @Test
