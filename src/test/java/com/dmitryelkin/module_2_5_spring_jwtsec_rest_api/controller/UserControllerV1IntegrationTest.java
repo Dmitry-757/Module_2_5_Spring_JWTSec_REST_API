@@ -10,7 +10,6 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceImpl
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,7 +27,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -101,12 +99,13 @@ class UserControllerV1IntegrationTest {
         assertEquals(userDtos, responseEntity.getBody());
     }
 
+
     @Test
     @WithMockUser(value = "user1Name", password = "123")
     void getById_ReturnsValidResponseEntity() throws Exception {
         // given
         User user = new User(123L,"user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
-        Mockito.doReturn(Optional.of(user)).when(mockRepository).findById(123L);
+        Mockito.doReturn(Optional.of(user)).when(mockRepository).findById(user.getId());
 
         // when & then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/123"))
@@ -118,7 +117,18 @@ class UserControllerV1IntegrationTest {
     }
 
     @Test
-    void getByName() {
+    @WithMockUser(value = "user1Name", password = "123")
+    void getByName_ReturnsValidResponseEntity() throws Exception {
+        // given
+        User user = new User(123L,"user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
+        Mockito.doReturn(Optional.of(user)).when(mockRepository).findByName(user.getName());
+
+        // when & then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/user1Name"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(content().json("""
+                    {"name":"user1Name", "token": null}
+                """));
     }
 
     @Test
