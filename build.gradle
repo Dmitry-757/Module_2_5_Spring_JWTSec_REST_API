@@ -21,6 +21,7 @@ ext{
     lombokVersion = '1.18.26'
     springBootVersion = '3.1.0'
     springSecirityVersion = '6.1.0'
+    restAssuredVersion = '5.3.0'
 
 }
 
@@ -52,6 +53,12 @@ dependencies {
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
+    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
+    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: "${restAssuredVersion}"
+
+
 }
 
 tasks.named('test') {

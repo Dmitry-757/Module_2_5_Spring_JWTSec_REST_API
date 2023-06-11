@@ -95,7 +95,7 @@ public class UserControllerV1 {
         if (item != null){
             User newItem = service.create(item);
             return ResponseEntity
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.CREATED)
                     .body(newItem);
         } else {
             return ResponseEntity

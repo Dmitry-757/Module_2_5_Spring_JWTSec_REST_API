@@ -5,6 +5,10 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.UserRepositoryI;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceI;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,8 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //@ExtendWith(MockitoExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,8 +40,14 @@ class UserControllerV1IntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private UserServiceI repository;
+
     @MockBean
     UserRepositoryI mockRepository;
+
+
 
     @BeforeEach
     void setup(){
@@ -100,7 +114,30 @@ class UserControllerV1IntegrationTest {
     }
 
     @Test
-    void createItem() {
+//    @WithMockUser(value = "user1Name", password = "123", authorities = "ADMIN")
+    void createItem_ReturnsValidResponseEntity() {
+        // given
+
+        User user = new User(123L,"user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
+
+        // when & then
+        Response response = RestAssured
+                .given()
+                .auth().basic("user_3", "pass345")
+                    .header("Content-type", "application/json")
+//                    .contentType(ContentType.JSON)
+                    .and()
+                    .body(user)
+                .when()
+                    //.post("/api/v1/users/")
+                .request("POST", "/api/v1/users/")
+                .then()
+                    .extract()
+                    .response();
+
+        assertEquals(201, response.statusCode());
+        assertEquals(response.as(User.class), user);
+
     }
 
     @Test
