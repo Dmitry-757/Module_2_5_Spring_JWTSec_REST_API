@@ -1,6 +1,8 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.CredentialsDTO;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.UserDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
@@ -117,6 +119,28 @@ class UserControllerV1IntegrationTest {
 //    @WithMockUser(value = "user1Name", password = "123", authorities = "ADMIN")
     void createItem_ReturnsValidResponseEntity() {
         // given
+
+
+        //try to authenticate
+        CredentialsDTO credentialsDto = new CredentialsDTO("user_3","pass345");
+        UserDTO userDto = new UserDTO("user_3");
+        Response response1 = RestAssured
+                .given()
+                .auth().basic("user_3", "pass345")
+                .header("Content-type", "application/json")
+//                    .contentType(ContentType.JSON)
+                .and()
+                .body(credentialsDto)
+                .when()
+                //.post("/api/v1/users/")
+                .request("POST", "/api/v1/auth/signIn")
+                .then()
+                .extract()
+                .response();
+
+        assertEquals(200, response1.statusCode());
+//        assertEquals(response1.as(UserDTO.class), userDto);
+
 
         User user = new User(123L,"user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
 
