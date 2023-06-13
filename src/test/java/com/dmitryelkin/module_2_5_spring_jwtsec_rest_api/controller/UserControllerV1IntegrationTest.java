@@ -169,11 +169,16 @@ class UserControllerV1IntegrationTest {
 
     @Test
     void auth() {
-        CredentialsDTO credentialsDTO = new CredentialsDTO("user_3", "pass345");
+        // given
+        User user = new User(3L, "user_3", "pass345", new ArrayList<>(), Status.ACTIVE, Role.ADMIN);
+        Mockito.doReturn(Optional.of(user)).when(mockRepository).findByName("user_3");
 
+
+        CredentialsDTO credentialsDTO = new CredentialsDTO("user_3", "pass345");
                 Response response = RestAssured
                 .given()
-                .auth().basic("user_3", "pass345")
+//                        .auth().none()
+//                .auth().basic("user_3", "pass345")
 //                    .header("Content-type", "application/json")
                     .contentType(ContentType.JSON)
                     .and()
