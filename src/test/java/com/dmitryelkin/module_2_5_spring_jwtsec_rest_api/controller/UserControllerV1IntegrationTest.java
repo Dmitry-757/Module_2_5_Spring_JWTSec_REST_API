@@ -1,12 +1,14 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.CredentialsDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.UserDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.UserRepositoryI;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceI;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
@@ -19,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -47,15 +51,19 @@ class UserControllerV1IntegrationTest {
     @MockBean
     UserRepositoryI mockRepository;
 
+    @LocalServerPort
+    int port;
 
     @BeforeEach
     void setup() {
         mockRepository.deleteAll();
+        RestAssured.port = port;
     }
 
     @Test
 //    @WithMockUser(authorities="ADMIN")
-    @WithMockUser(value = "user1Name", password = "123")
+//    @WithMockUser(value = "user1Name", password = "123")
+    @WithMockUser()
     public void getAllUsers_whenMockMVC_thenVerifyResponse() throws Exception {
 
         var users = List.of(
@@ -82,7 +90,8 @@ class UserControllerV1IntegrationTest {
 
 
     @Test
-    @WithMockUser(value = "user1Name", password = "123")
+//    @WithMockUser(value = "user1Name", password = "123")
+    @WithMockUser()
     void getById_ReturnsValidResponseEntity() throws Exception {
         // given
         User user = new User(123L, "user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
@@ -97,8 +106,10 @@ class UserControllerV1IntegrationTest {
 
     }
 
+
     @Test
-    @WithMockUser(value = "user1Name", password = "123")
+//    @WithMockUser(value = "user1Name", password = "123")
+    @WithMockUser()
     void getByName_ReturnsValidResponseEntity() throws Exception {
         // given
         User user = new User(123L, "user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
@@ -120,7 +131,7 @@ class UserControllerV1IntegrationTest {
         Mockito.doReturn(user).when(mockRepository).saveAndFlush(user);
         MockMvcResponse response = RestAssuredMockMvc
                 .given()
-                    .auth().with(SecurityMockMvcRequestPostProcessors.user("user_3").password("pass345").roles("ADMIN"))
+                    .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
                     .contentType(ContentType.JSON)
                     .body(user)
                 .when()
@@ -153,6 +164,28 @@ class UserControllerV1IntegrationTest {
 //        assertEquals(201, response.statusCode());
 //        assertEquals(response.as(User.class), user);
 
+    }
+
+
+    @Test
+    void auth() {
+        CredentialsDTO credentialsDTO = new CredentialsDTO("user_3", "pass345");
+
+                Response response = RestAssured
+                .given()
+                .auth().basic("user_3", "pass345")
+//                    .header("Content-type", "application/json")
+                    .contentType(ContentType.JSON)
+                    .and()
+                    .body(credentialsDTO)
+                .when()
+                    //.post("/api/v1/users/")
+                .request("POST", "/api/v1/auth/signIn/")
+                .then()
+                    .extract()
+                    .response();
+
+        assertEquals(HttpStatus.OK.value(), response.statusCode());
     }
 
     @Test
