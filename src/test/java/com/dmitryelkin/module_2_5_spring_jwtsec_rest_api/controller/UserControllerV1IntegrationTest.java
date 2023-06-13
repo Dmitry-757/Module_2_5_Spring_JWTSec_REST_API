@@ -1,15 +1,15 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.CredentialsDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.UserDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.UserRepositoryI;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceI;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import io.restassured.module.mockmvc.response.MockMvcResponse;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -29,11 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //@ExtendWith(MockitoExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -50,9 +48,8 @@ class UserControllerV1IntegrationTest {
     UserRepositoryI mockRepository;
 
 
-
     @BeforeEach
-    void setup(){
+    void setup() {
         mockRepository.deleteAll();
     }
 
@@ -62,9 +59,9 @@ class UserControllerV1IntegrationTest {
     public void getAllUsers_whenMockMVC_thenVerifyResponse() throws Exception {
 
         var users = List.of(
-                new User("user1Name","123"),
-                new User("user2Name","321"),
-                new User("user3Name","213")
+                new User("user1Name", "123"),
+                new User("user2Name", "321"),
+                new User("user3Name", "213")
         );
 
 //        BDDMockito.given(this.mockRepository.findAll()).willReturn(users);
@@ -74,12 +71,12 @@ class UserControllerV1IntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$[0].name", Matchers.is("user1Name")))
                 .andExpect(content().json("""
-               [      
-                        {"name":"user1Name","token":null},
-                        {"name":"user2Name","token":null},
-                        {"name":"user3Name","token":null}
-               ]
-            """))
+                           [      
+                                    {"name":"user1Name","token":null},
+                                    {"name":"user2Name","token":null},
+                                    {"name":"user3Name","token":null}
+                           ]
+                        """))
         ;
     }
 
@@ -88,15 +85,15 @@ class UserControllerV1IntegrationTest {
     @WithMockUser(value = "user1Name", password = "123")
     void getById_ReturnsValidResponseEntity() throws Exception {
         // given
-        User user = new User(123L,"user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
+        User user = new User(123L, "user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
         Mockito.doReturn(Optional.of(user)).when(mockRepository).findById(user.getId());
 
         // when & then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/123"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(content().json("""
-                        {"name":"user1Name","token":null}
-            """));
+                                    {"name":"user1Name","token":null}
+                        """));
 
     }
 
@@ -104,63 +101,57 @@ class UserControllerV1IntegrationTest {
     @WithMockUser(value = "user1Name", password = "123")
     void getByName_ReturnsValidResponseEntity() throws Exception {
         // given
-        User user = new User(123L,"user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
+        User user = new User(123L, "user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
         Mockito.doReturn(Optional.of(user)).when(mockRepository).findByName(user.getName());
 
         // when & then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/user1Name"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(content().json("""
-                    {"name":"user1Name", "token": null}
-                """));
+                            {"name":"user1Name", "token": null}
+                        """));
     }
 
     @Test
-//    @WithMockUser(value = "user1Name", password = "123", authorities = "ADMIN")
     void createItem_ReturnsValidResponseEntity() {
+        RestAssuredMockMvc.mockMvc(mockMvc);
         // given
-
-
-        //try to authenticate
-        CredentialsDTO credentialsDto = new CredentialsDTO("user_3","pass345");
-        UserDTO userDto = new UserDTO("user_3");
-        Response response1 = RestAssured
+        User user = new User(444L, "user4Name", "pass4", new ArrayList<>(), Status.ACTIVE, Role.USER);
+        Mockito.doReturn(user).when(mockRepository).saveAndFlush(user);
+        MockMvcResponse response = RestAssuredMockMvc
                 .given()
-                .auth().basic("user_3", "pass345")
-                .header("Content-type", "application/json")
-//                    .contentType(ContentType.JSON)
-                .and()
-                .body(credentialsDto)
+                    .auth().with(SecurityMockMvcRequestPostProcessors.user("user_3").password("pass345").roles("ADMIN"))
+                    .contentType(ContentType.JSON)
+                    .body(user)
                 .when()
-                //.post("/api/v1/users/")
-                .request("POST", "/api/v1/auth/signIn")
+                    .request("POST", "/api/v1/users/")
                 .then()
                 .extract()
                 .response();
 
-        assertEquals(200, response1.statusCode());
-//        assertEquals(response1.as(UserDTO.class), userDto);
-
-
-        User user = new User(123L,"user1Name", "pass1", new ArrayList<>(), Status.ACTIVE, Role.USER);
-
-        // when & then
-        Response response = RestAssured
-                .given()
-                .auth().basic("user_3", "pass345")
-                    .header("Content-type", "application/json")
-//                    .contentType(ContentType.JSON)
-                    .and()
-                    .body(user)
-                .when()
-                    //.post("/api/v1/users/")
-                .request("POST", "/api/v1/users/")
-                .then()
-                    .extract()
-                    .response();
-
         assertEquals(201, response.statusCode());
         assertEquals(response.as(User.class), user);
+        ;
+
+
+
+        // when & then
+//        Response response = RestAssured
+//                .given()
+//                .auth().basic("user_3", "pass345")
+//                    .header("Content-type", "application/json")
+////                    .contentType(ContentType.JSON)
+//                    .and()
+//                    .body(user)
+//                .when()
+//                    //.post("/api/v1/users/")
+//                .request("POST", "/api/v1/users/")
+//                .then()
+//                    .extract()
+//                    .response();
+//
+//        assertEquals(201, response.statusCode());
+//        assertEquals(response.as(User.class), user);
 
     }
 
