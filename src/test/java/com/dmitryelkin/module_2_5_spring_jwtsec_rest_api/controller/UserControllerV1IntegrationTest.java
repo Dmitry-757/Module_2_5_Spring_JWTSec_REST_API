@@ -142,56 +142,9 @@ class UserControllerV1IntegrationTest {
 
         assertEquals(201, response.statusCode());
         assertEquals(response.as(User.class), user);
-        ;
-
-
-
-        // when & then
-//        Response response = RestAssured
-//                .given()
-//                .auth().basic("user_3", "pass345")
-//                    .header("Content-type", "application/json")
-////                    .contentType(ContentType.JSON)
-//                    .and()
-//                    .body(user)
-//                .when()
-//                    //.post("/api/v1/users/")
-//                .request("POST", "/api/v1/users/")
-//                .then()
-//                    .extract()
-//                    .response();
-//
-//        assertEquals(201, response.statusCode());
-//        assertEquals(response.as(User.class), user);
 
     }
 
-
-    @Test
-    void auth() {
-        // given
-        User user = new User(3L, "user_3", "pass345", new ArrayList<>(), Status.ACTIVE, Role.ADMIN);
-        Mockito.doReturn(Optional.of(user)).when(mockRepository).findByName("user_3");
-
-
-        CredentialsDTO credentialsDTO = new CredentialsDTO("user_3", "pass345");
-                Response response = RestAssured
-                .given()
-//                        .auth().none()
-//                .auth().basic("user_3", "pass345")
-//                    .header("Content-type", "application/json")
-                    .contentType(ContentType.JSON)
-                    .and()
-                    .body(credentialsDTO)
-                .when()
-                    //.post("/api/v1/users/")
-                .request("POST", "/api/v1/auth/signIn/")
-                .then()
-                    .extract()
-                    .response();
-
-        assertEquals(HttpStatus.OK.value(), response.statusCode());
-    }
 
     @Test
     void update() {
