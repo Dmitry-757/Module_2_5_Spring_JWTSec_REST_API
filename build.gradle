@@ -60,6 +60,7 @@ dependencies {
 // https://mvnrepository.com/artifact/io.rest-assured/spring-mock-mvc
     testImplementation group: 'io.rest-assured', name: 'spring-mock-mvc', version: "${restAssuredVersion}"
 
+    implementation group: 'io.rest-assured', name: 'rest-assured', version: "${restAssuredVersion}"
 
 }
 
