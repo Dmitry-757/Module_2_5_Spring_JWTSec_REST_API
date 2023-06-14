@@ -37,5 +37,4 @@ public class authTest {
         assertEquals(HttpStatus.OK.value(), response.statusCode());
     }
 
-
 }
