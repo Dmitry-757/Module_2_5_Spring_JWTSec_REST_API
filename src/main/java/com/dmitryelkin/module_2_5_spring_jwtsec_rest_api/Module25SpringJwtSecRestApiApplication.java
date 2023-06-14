@@ -14,6 +14,10 @@ public class Module25SpringJwtSecRestApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(Module25SpringJwtSecRestApiApplication.class, args);
 
+        myTest();
+    }
+
+    public static void myTest(){
         RestAssured.port = 8090;
 
         CredentialsDTO credentialsDTO = new CredentialsDTO("user_3", "pass345");
