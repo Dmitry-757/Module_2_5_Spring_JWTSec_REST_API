@@ -31,7 +31,7 @@ public class Module25SpringJwtSecRestApiApplication {
                 .then()
                 .extract()
                 .response();
-        System.out.println(response);
+        System.out.println("Status code: "+response.getStatusCode());
     }
 
 }

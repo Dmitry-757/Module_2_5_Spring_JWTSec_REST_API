@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthFilter(userAuthenticationProvider), UserNamePasswordAuthFilter.class)//а этот перед UsernamePasswordAuthFilter
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/signIn/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/error").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole(
                                 Role.ADMIN.name(),
@@ -71,7 +72,12 @@ public class SecurityConfig {
                                 Role.MODERATOR.name()
                         )
 
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(exeptionHandling -> exeptionHandling
+                        .accessDeniedHandler(((request, response, accessDeniedException) ->
+                                accessDeniedException.printStackTrace()))
+                )
         ;
         return http.build();
     }
