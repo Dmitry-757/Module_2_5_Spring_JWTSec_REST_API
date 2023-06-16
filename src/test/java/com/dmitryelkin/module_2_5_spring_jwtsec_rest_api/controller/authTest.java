@@ -2,7 +2,6 @@ package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.CredentialsDTO;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,16 +24,22 @@ public class authTest {
         CredentialsDTO credentialsDTO = new CredentialsDTO("user_3", "pass345");
         Response response = RestAssured
                 .given()
-                .contentType(ContentType.JSON)
+                .log().all()
+//                .auth().basic("user_3", "pass345")
+                .contentType("application/json")
+                .urlEncodingEnabled(false)
                 .and()
                 .body(credentialsDTO)
                 .when()
-                .request("POST", "/api/v1/auth/signIn/")
+                .request("POST", "/api/v1/auth/signIn")
                 .then()
+                .log().all()
                 .extract()
-                .response();
-
+                .response()
+                ;
+        String userName = response.jsonPath().get("name");
         assertEquals(HttpStatus.OK.value(), response.statusCode());
+        assertEquals(userName, credentialsDTO.getLogin());
     }
 
 }

@@ -74,11 +74,11 @@ public class SecurityConfig {
 
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .accessDeniedHandler(((request, response, accessDeniedException) ->
-                        {accessDeniedException.printStackTrace();
-                            System.out.println(accessDeniedException.getMessage());}))
-                )
+//                .exceptionHandling(exceptionHandling -> exceptionHandling
+//                        .accessDeniedHandler(((request, response, accessDeniedException) ->
+//                        {accessDeniedException.printStackTrace();
+//                            System.out.println(accessDeniedException.getMessage());}))
+//                )
         ;
         return http.build();
     }
