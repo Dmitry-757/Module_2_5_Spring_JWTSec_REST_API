@@ -57,7 +57,7 @@ public class UserControllerV1 {
         }
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/search/{name}")
     public ResponseEntity<UserDTO> getByName(@PathVariable String name){
         User item = service.getByName(name);
         if(item != null) {

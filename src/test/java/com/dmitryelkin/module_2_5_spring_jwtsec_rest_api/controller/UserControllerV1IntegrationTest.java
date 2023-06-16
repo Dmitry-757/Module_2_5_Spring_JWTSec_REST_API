@@ -1,8 +1,6 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.CredentialsDTO;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.UserDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
@@ -12,7 +10,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
-import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +19,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -116,7 +112,7 @@ class UserControllerV1IntegrationTest {
         Mockito.doReturn(Optional.of(user)).when(mockRepository).findByName(user.getName());
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/user1Name"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/search/user1Name"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(content().json("""
                             {"name":"user1Name", "token": null}
