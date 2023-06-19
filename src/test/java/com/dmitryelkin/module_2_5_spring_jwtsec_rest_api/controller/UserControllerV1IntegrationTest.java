@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -138,15 +140,97 @@ class UserControllerV1IntegrationTest {
 
         assertEquals(201, response.statusCode());
         assertEquals(response.as(User.class), user);
-
     }
 
 
     @Test
     void update() {
+        RestAssuredMockMvc.mockMvc(mockMvc);
+        // given
+        User user = new User(444L, "user4Name", "pass4", new ArrayList<>(), Status.ACTIVE, Role.USER);
+        Mockito.doReturn(user).when(mockRepository).saveAndFlush(user);
+        Mockito.doReturn(true).when(mockRepository).existsById(444L);
+
+        User nonExistentUser = new User(445L, "nonExistentUser", "pass", new ArrayList<>(), Status.ACTIVE, Role.USER);
+        Mockito.doReturn(user).when(mockRepository).saveAndFlush(nonExistentUser);
+
+        // when
+        MockMvcResponse response = RestAssuredMockMvc
+                .given()
+                .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
+                .contentType(ContentType.JSON)
+                .body(user)
+                .when()
+                .request("PUT", "/api/v1/users/")
+                .then()
+                .extract()
+                .response();
+        // then
+        assertEquals(200, response.statusCode());
+        assertEquals(response.as(User.class), user);
+
+        // when
+        response = RestAssuredMockMvc
+                .given()
+                .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
+                .contentType(ContentType.JSON)
+                .body(nonExistentUser)
+                .when()
+                .request("PUT", "/api/v1/users/")
+                .then()
+                .extract()
+                .response();
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
+        assertEquals(response.getBody().asString(),"No such item for update");
+
     }
 
     @Test
     void delete() {
+        RestAssuredMockMvc.mockMvc(mockMvc);
+        // given
+        User user = new User(444L, "user4Name", "pass4", new ArrayList<>(), Status.ACTIVE, Role.USER);
+        User deletedUser = new User(444L, "user4Name", "pass4", new ArrayList<>(), Status.DELETED, Role.USER);
+        Mockito.doReturn(deletedUser).when(mockRepository).saveAndFlush(user);
+        Mockito.doReturn(Optional.of(user)).when(mockRepository).findById(444L);
+
+
+        // when
+//        MockMvcResponse response = RestAssuredMockMvc
+//                .given()
+//                .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
+//                .contentType(ContentType.JSON)
+//                .body(user)
+//                .when()
+//                .request("DELETE", "/api/v1/users/444")
+//                .then()
+//                .extract()
+//                .response();
+//        // then
+//        assertEquals(response.statusCode(),HttpStatus.OK.value());
+//        assertEquals(response.as(User.class), deletedUser);
+
+
+        // given
+        Mockito.doReturn(Optional.empty()).when(mockRepository).findById(445L);
+
+        // when
+        MockMvcResponse response = RestAssuredMockMvc
+                .given()
+                .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
+                .contentType(ContentType.JSON)
+//                .body(user)
+                .when()
+                .request("DELETE", "/api/v1/users/445")
+                .then()
+                .extract()
+                .response();
+        // then
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+        assertEquals(response.getBody().asString(),"No such item for deleting");
+
+
     }
 }

@@ -26,7 +26,11 @@ public class UserServiceImpl implements UserServiceI{
 
     @Override
     public User update(User item) {
-        return repository.saveAndFlush(item);
+        if (repository.existsById(item.getId())) {
+            return repository.saveAndFlush(item);
+        } else {
+            return null;
+        }
     }
 
     @Override
