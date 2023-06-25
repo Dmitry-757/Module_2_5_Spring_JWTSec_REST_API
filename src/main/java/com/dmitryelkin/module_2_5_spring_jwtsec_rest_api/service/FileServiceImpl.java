@@ -68,7 +68,10 @@ public class FileServiceImpl implements FileServiceI {
             S3Object s3object = s3client.getObject(bucketName, name);
             inputStream = s3object.getObjectContent();
             log.info("File {} downloaded", name);
-        }
+        }else
+            log.info("File {} was not found", name);
+
+
         return inputStream;
     }
 
