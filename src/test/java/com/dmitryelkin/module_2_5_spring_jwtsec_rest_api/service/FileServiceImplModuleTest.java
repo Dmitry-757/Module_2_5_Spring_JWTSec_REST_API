@@ -33,9 +33,6 @@ class FileServiceImplModuleTest {
 
     @InjectMocks
     private FileServiceImpl service;
-//    @Test
-//    void upload() {
-//    }
 
     @Test
     void getAll() {

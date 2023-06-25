@@ -1,20 +1,17 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 
 @Data
 @Builder
 @AllArgsConstructor
+//@RequiredArgsConstructor
 @Entity
 @Table(name = "events")
 public class Event {
@@ -23,7 +20,7 @@ public class Event {
     private long id;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime eventDateTime;
+    private final LocalDateTime eventDateTime;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

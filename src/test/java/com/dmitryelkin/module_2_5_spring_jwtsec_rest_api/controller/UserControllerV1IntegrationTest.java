@@ -5,7 +5,6 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.UserRepositoryI;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceI;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -31,7 +30,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -42,9 +40,6 @@ class UserControllerV1IntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private UserServiceI repository;
 
     @MockBean
     UserRepositoryI mockRepository;
@@ -77,7 +72,7 @@ class UserControllerV1IntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$[0].name", Matchers.is("user1Name")))
                 .andExpect(content().json("""
-                           [      
+                           [
                                     {"name":"user1Name","token":null},
                                     {"name":"user2Name","token":null},
                                     {"name":"user3Name","token":null}
