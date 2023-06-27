@@ -148,7 +148,7 @@ class UserControllerV1IntegrationTest {
         Mockito.doReturn(true).when(mockRepository).existsById(444L);
 
         User nonExistentUser = new User(445L, "nonExistentUser", "pass", new ArrayList<>(), Status.ACTIVE, Role.USER);
-        Mockito.doReturn(user).when(mockRepository).saveAndFlush(nonExistentUser);
+        Mockito.doReturn(null).when(mockRepository).saveAndFlush(nonExistentUser);
 
         // when
         MockMvcResponse response = RestAssuredMockMvc
@@ -224,9 +224,7 @@ class UserControllerV1IntegrationTest {
                 .extract()
                 .response();
         // then
-        assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
-        assertEquals(response.getBody().asString(),"No such item for deleting");
-
-
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
+        assertEquals("No such item for deleting", response.getBody().asString());
     }
 }

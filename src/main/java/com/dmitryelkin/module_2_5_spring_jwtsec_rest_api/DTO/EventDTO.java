@@ -3,11 +3,12 @@ package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Event;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
+import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-
+@Getter
 public class EventDTO {
     private final long id;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

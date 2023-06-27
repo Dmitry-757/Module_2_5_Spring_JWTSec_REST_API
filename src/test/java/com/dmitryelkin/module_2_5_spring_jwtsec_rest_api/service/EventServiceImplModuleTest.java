@@ -61,18 +61,18 @@ class EventServiceImplModuleTest {
     @Test
     void getAll() {
         // given
-        var users = List.of(
+        var items = List.of(
                 new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE),
-                new Event(123L, LocalDateTime.now(), new User("userName2", "pass2"), new File(), Status.ACTIVE),
-                new Event(123L, LocalDateTime.now(), new User("userName3", "pass3"), new File(), Status.ACTIVE)
+                new Event(124L, LocalDateTime.now(), new User("userName2", "pass2"), new File(), Status.ACTIVE),
+                new Event(125L, LocalDateTime.now(), new User("userName3", "pass3"), new File(), Status.ACTIVE)
         );
-        Mockito.doReturn(users).when(repository).findAll();
+        Mockito.doReturn(items).when(repository).findAll();
 
         // when
         var responseEntity = service.getAll();
 
         // then
-        assertEquals(users, responseEntity);
+        assertEquals(items, responseEntity);
 
     }
 

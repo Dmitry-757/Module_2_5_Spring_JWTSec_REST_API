@@ -25,13 +25,14 @@ public class EventControllerV1 {
     public ResponseEntity<List<EventDTO>> getAll() {
         List<Event> items = service.getAll();
         if ((items != null) && (!items.isEmpty())) {
+//            List<EventDTO> body = items.stream()
+//                    .map(e -> new EventDTO(e))
+//                    .toList();
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(
-                            items.stream()
-                                    .map(EventDTO::new)
-                                    .toList()
-                    );
+                    .body( items.stream()
+                            .map(EventDTO::new)
+                            .toList() );
         } else {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
@@ -59,7 +60,7 @@ public class EventControllerV1 {
         if (item != null) {
             Event newItem = service.create(item);
             return ResponseEntity
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.CREATED)
                     .body(newItem);
         } else {
             return ResponseEntity
@@ -70,29 +71,43 @@ public class EventControllerV1 {
 
     @PutMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Event> update(@RequestBody Event item) {
+    public ResponseEntity<?> update(@RequestBody Event item) {
         if (item != null && item.getId() != 0) {
             Event updatingItem = service.update(item);
+            if (updatingItem != null) {
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(updatingItem);
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+//                        .contentType(MediaType.TEXT_PLAIN)
+                        .body("No such item for update");
+            }
+        }else {
             return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(updatingItem);
-        } else {
-            return ResponseEntity
-                    .noContent()
+                    .status(HttpStatus.NO_CONTENT)
                     .build();
         }
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Event> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         if (id != null) {
 
             Event deletingItem = service.delete(id);
-            return ResponseEntity
+
+            if (deletingItem != null) {
+                return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(deletingItem);
-        } else {
+            }else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("No such item for deleting");
+            }
+        }else{
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
                     .build();
