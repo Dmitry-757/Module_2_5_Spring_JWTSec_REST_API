@@ -1,8 +1,8 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.TypeOfEvent;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceI;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.FileServiceI;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -48,7 +48,7 @@ public class FileControllerV1 {
 
 
         if (inputStream == null) {
-            eventService.setNewEvent(fileName);
+            eventService.setNewEvent(fileName, TypeOfEvent.DOWNLOAD);
 
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -72,7 +72,7 @@ public class FileControllerV1 {
         try {
             service.upload(file);
 
-            eventService.setNewEvent(file.getName());
+            eventService.setNewEvent(file.getName(), TypeOfEvent.UPLOAD);
 
             return ResponseEntity.ok()
                     .body("File uploaded");
@@ -87,7 +87,7 @@ public class FileControllerV1 {
     public ResponseEntity<?> delete(@PathVariable String fileName) {
         if (fileName == null) {
 
-            eventService.setNewEvent(fileName);
+            eventService.setNewEvent(fileName, TypeOfEvent.DELETE);
 
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)

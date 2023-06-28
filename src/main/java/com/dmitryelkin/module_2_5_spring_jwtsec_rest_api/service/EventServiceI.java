@@ -3,6 +3,7 @@ package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service;
 
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Event;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.TypeOfEvent;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface EventServiceI {
     Event getById(long id);
     Event getByUser(User user);
 
-    void setNewEvent(String fileName);
+    void setNewEvent(String fileName, TypeOfEvent typeOfEvent);
 }
