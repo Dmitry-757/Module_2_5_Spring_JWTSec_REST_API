@@ -1,6 +1,8 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceI;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.FileServiceI;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -18,10 +20,13 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/files/")
 public class FileControllerV1 {
     private final FileServiceI service;
+    private final EventServiceI eventService;
+
 
     @Autowired
-    public FileControllerV1(FileServiceI service) {
+    public FileControllerV1(FileServiceI service, EventServiceI eventService) {
         this.service = service;
+        this.eventService = eventService;
     }
 
     @GetMapping
@@ -40,7 +45,11 @@ public class FileControllerV1 {
     @GetMapping("/{fileName}")
     public ResponseEntity<?> getFilesByName(@PathVariable String fileName) {
         InputStream inputStream = service.download(fileName);
+
+
         if (inputStream == null) {
+            eventService.setNewEvent(fileName);
+
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("File not found");
@@ -62,6 +71,9 @@ public class FileControllerV1 {
 
         try {
             service.upload(file);
+
+            eventService.setNewEvent(file.getName());
+
             return ResponseEntity.ok()
                     .body("File uploaded");
         } catch (IOException e) {
@@ -74,6 +86,9 @@ public class FileControllerV1 {
     @DeleteMapping("/{fileName}")
     public ResponseEntity<?> delete(@PathVariable String fileName) {
         if (fileName == null) {
+
+            eventService.setNewEvent(fileName);
+
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("File not found");

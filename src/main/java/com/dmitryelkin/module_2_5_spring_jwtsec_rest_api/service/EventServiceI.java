@@ -15,4 +15,6 @@ public interface EventServiceI {
     List<Event> getAll();
     Event getById(long id);
     Event getByUser(User user);
+
+    void setNewEvent(String fileName);
 }

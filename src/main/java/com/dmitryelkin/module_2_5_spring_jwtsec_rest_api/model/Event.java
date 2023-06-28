@@ -33,8 +33,18 @@ public class Event {
     @Value("Status.ACTIVE")
     private Status status;
 
+    @Enumerated(EnumType.STRING)
+    private TypeOfEvent typeOfEvent;
+
     public Event() {
         this.eventDateTime = LocalDateTime.now();
+    }
+    public Event(User user, File file, TypeOfEvent typeOfEvent) {
+        this.eventDateTime = LocalDateTime.now();
+        this.user = user;
+        this.file = file;
+        this.typeOfEvent = typeOfEvent;
+        this.status = Status.ACTIVE;
     }
 
 

@@ -2,7 +2,7 @@ package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.EventDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Event;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceImpl;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +14,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/events/")
 public class EventControllerV1 {
-    private final EventServiceImpl service;
+    private final EventServiceI service;
 
     @Autowired
-    public EventControllerV1(EventServiceImpl service) {
+    public EventControllerV1(EventServiceI service) {
         this.service = service;
     }
 
@@ -81,7 +81,6 @@ public class EventControllerV1 {
             } else {
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
-//                        .contentType(MediaType.TEXT_PLAIN)
                         .body("No such item for update");
             }
         }else {

@@ -1,10 +1,7 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.EventDTO;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Event;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.*;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.EventRepositoryI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
@@ -58,9 +55,9 @@ class EventControllerV1IntegrationTest {
     @WithMockUser()
     void getAll() throws Exception {
         var items = List.of(
-                new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE),
-                new Event(124L, LocalDateTime.now(), new User("userName2", "pass2"), new File(), Status.ACTIVE),
-                new Event(125L, LocalDateTime.now(), new User("userName3", "pass3"), new File(), Status.ACTIVE)
+                new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST),
+                new Event(124L, LocalDateTime.now(), new User("userName2", "pass2"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST),
+                new Event(125L, LocalDateTime.now(), new User("userName3", "pass3"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST)
         );
 
 //        BDDMockito.given(this.mockRepository.findAll()).willReturn(items);
@@ -80,7 +77,7 @@ class EventControllerV1IntegrationTest {
     @WithMockUser()
     void getById() throws Exception {
         // given
-        Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE);
+        Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
         EventDTO expectedItem = new EventDTO(item);
         Mockito.doReturn(Optional.of(item)).when(mockRepository).findById(item.getId());
 
@@ -95,7 +92,7 @@ class EventControllerV1IntegrationTest {
     void createItem() {
         RestAssuredMockMvc.mockMvc(mockMvc);
         // given
-        Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE);
+        Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
         Mockito.doReturn(item).when(mockRepository).saveAndFlush(item);
         MockMvcResponse response = RestAssuredMockMvc
                 .given()
@@ -118,12 +115,12 @@ class EventControllerV1IntegrationTest {
         RestAssuredMockMvc.mockMvc(mockMvc);
         // given
         Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"),
-                new File(), Status.ACTIVE);
+                new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
         Mockito.doReturn(item).when(mockRepository).saveAndFlush(item);
         Mockito.doReturn(true).when(mockRepository).existsById(item.getId());
 
         Event nonExistentItem = new Event(321L, LocalDateTime.now(), new User("nonExistentUser", "pass1"),
-                new File(), Status.ACTIVE);
+                new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
         Mockito.doReturn(null).when(mockRepository).saveAndFlush(nonExistentItem);
 
         // when
@@ -164,9 +161,9 @@ class EventControllerV1IntegrationTest {
         RestAssuredMockMvc.mockMvc(mockMvc);
         // given
         Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"),
-                new File(), Status.ACTIVE);
+                new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
         Event deletedItem = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"),
-                new File(), Status.DELETED);
+                new File(), Status.DELETED, TypeOfEvent.FORTEST);
 
         Mockito.doReturn(deletedItem).when(mockRepository).saveAndFlush(item);
         Mockito.doReturn(Optional.of(item)).when(mockRepository).findById(item.getId());

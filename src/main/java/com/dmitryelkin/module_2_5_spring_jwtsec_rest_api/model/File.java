@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Objects;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -27,17 +25,7 @@ public class File {
     @Value("Status.ACTIVE")
     private Status status;
 
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        File file = (File) o;
-//        return id == file.id && name.equals(file.name) && location.equals(file.location);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, name, location);
-//    }
+    public File(String name) {
+        this.name = name;
+    }
 }

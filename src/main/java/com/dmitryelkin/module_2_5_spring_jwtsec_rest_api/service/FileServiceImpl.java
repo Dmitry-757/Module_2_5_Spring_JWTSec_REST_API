@@ -1,7 +1,10 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,20 +28,6 @@ public class FileServiceImpl implements FileServiceI {
         this.s3client = s3client;
     }
 
-
-//    public void createBucket() {
-//
-//        if (s3client.doesBucketExistV2(bucketName)) {
-//            log.info("Bucket {} already exists, use a different name ", bucketName);
-//            return;
-//        }
-//
-//        s3client.createBucket(bucketName);
-//    }
-//
-//    public void listBuckets() {
-//        List<Bucket> buckets = s3client.listBuckets();
-//    }
 
     @Override
     public void upload(MultipartFile file) throws IOException {
@@ -70,7 +59,6 @@ public class FileServiceImpl implements FileServiceI {
             log.info("File {} downloaded", name);
         }else
             log.info("File {} was not found", name);
-
 
         return inputStream;
     }

@@ -1,9 +1,6 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service;
 
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Event;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.*;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.EventRepositoryI;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +26,7 @@ class EventServiceImplModuleTest {
     @Test
     void create() {
         // given
-        Event item1 = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE);
+        Event item1 = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
         Mockito.doReturn(item1).when(repository).saveAndFlush(item1);
 
         // when
@@ -46,8 +43,8 @@ class EventServiceImplModuleTest {
     @Test
     void delete() {
         // given
-        Event item1 = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE);
-        Event item2 = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.DELETED);
+        Event item1 = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
+        Event item2 = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.DELETED, TypeOfEvent.FORTEST);
         Mockito.doReturn(Optional.of(item2)).when(repository).findById(item1.getId());
 
         // when
@@ -62,9 +59,9 @@ class EventServiceImplModuleTest {
     void getAll() {
         // given
         var items = List.of(
-                new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE),
-                new Event(124L, LocalDateTime.now(), new User("userName2", "pass2"), new File(), Status.ACTIVE),
-                new Event(125L, LocalDateTime.now(), new User("userName3", "pass3"), new File(), Status.ACTIVE)
+                new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST),
+                new Event(124L, LocalDateTime.now(), new User("userName2", "pass2"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST),
+                new Event(125L, LocalDateTime.now(), new User("userName3", "pass3"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST)
         );
         Mockito.doReturn(items).when(repository).findAll();
 
@@ -79,7 +76,7 @@ class EventServiceImplModuleTest {
     @Test
     void getById() {
         // given
-        Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE);
+        Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
         Mockito.doReturn(Optional.of(item)).when(repository).findById(item.getId());
 
         // when
@@ -93,7 +90,7 @@ class EventServiceImplModuleTest {
     @Test
     void getByUser() {
         // given
-        Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE);
+        Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
         Mockito.doReturn(Optional.of(item)).when(repository).findByUser(item.getUser());
 
         // when
