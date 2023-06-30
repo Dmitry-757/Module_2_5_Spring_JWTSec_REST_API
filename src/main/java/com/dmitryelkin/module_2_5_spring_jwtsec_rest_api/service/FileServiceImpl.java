@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.FileRepositoryI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,12 +20,14 @@ import java.util.List;
 @Slf4j
 @Service
 public class FileServiceImpl implements FileServiceI {
+    private final FileRepositoryI repository;
     private final AmazonS3 s3client;
     @Value("${aws.bucketName}")
     private String bucketName;
 
     @Autowired
-    public FileServiceImpl(AmazonS3 s3client) {
+    public FileServiceImpl(FileRepositoryI repository, AmazonS3 s3client) {
+        this.repository = repository;
         this.s3client = s3client;
     }
 
