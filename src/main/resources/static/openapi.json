@@ -2,14 +2,46 @@
   "openapi": "3.0.3",
   "info": {
     "title": "JWT Secured AWS S3 REST API",
-    "description": "Title",
+    "description": "Необходимо реализовать REST API, которое взаимодействует с файловым хранилищем AWS S3 и предоставляет возможность получать доступ к файлам и истории загрузок.\n Логика безопасности должна быть реализована средствами JWT токена.",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https"
+      "url": "http://localhost:8090",
+      "description": "локальный сервер разработки"
     }
   ],
   "paths": {
+    "/api/v1/files/": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Успешный результат получения списка файлов",
+            "content": {
+              "application/v1+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name":{
+                        "type": "string",
+                        "title": "имя файла",
+                        "nullable": false,
+                        "example": "some file name )"
+                      }
+                    },
+                    "required": ["name"]
+                  }
+                }
+              },
+              "application/v2+json": {
+
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
