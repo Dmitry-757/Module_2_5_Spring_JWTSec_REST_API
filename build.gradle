@@ -62,6 +62,11 @@ dependencies {
 
     implementation group: 'io.rest-assured', name: 'rest-assured', version: "${restAssuredVersion}"
 
+// https://mvnrepository.com/artifact/com.atlassian.oai/swagger-request-validator-mockmvc
+    implementation group: 'com.atlassian.oai', name: 'swagger-request-validator-mockmvc', version: '2.35.1'
+// https://mvnrepository.com/artifact/com.atlassian.oai/swagger-request-validator-restassured
+    implementation group: 'com.atlassian.oai', name: 'swagger-request-validator-restassured', version: '2.35.1'
+
 }
 
 tasks.named('test') {

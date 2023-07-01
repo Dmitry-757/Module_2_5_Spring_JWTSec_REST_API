@@ -20,13 +20,11 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/files/")
 public class FileControllerV1 {
     private final FileServiceI service;
-    private final EventServiceI eventService;
 
 
     @Autowired
-    public FileControllerV1(FileServiceI service, EventServiceI eventService) {
+    public FileControllerV1(FileServiceI service) {
         this.service = service;
-        this.eventService = eventService;
     }
 
     @GetMapping
@@ -48,7 +46,6 @@ public class FileControllerV1 {
 
 
         if (inputStream == null) {
-            eventService.setNewEvent(fileName, TypeOfEvent.DOWNLOAD);
 
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -72,8 +69,6 @@ public class FileControllerV1 {
         try {
             service.upload(file);
 
-            eventService.setNewEvent(file.getName(), TypeOfEvent.UPLOAD);
-
             return ResponseEntity.ok()
                     .body("File uploaded");
         } catch (IOException e) {
@@ -86,8 +81,6 @@ public class FileControllerV1 {
     @DeleteMapping("/{fileName}")
     public ResponseEntity<?> delete(@PathVariable String fileName) {
         if (fileName == null) {
-
-            eventService.setNewEvent(fileName, TypeOfEvent.DELETE);
 
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)

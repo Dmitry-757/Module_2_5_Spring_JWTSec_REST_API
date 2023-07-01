@@ -28,4 +28,9 @@ public class File {
     public File(String name) {
         this.name = name;
     }
+    public File(String name, String location) {
+        this.name = name;
+        this.location = location;
+    }
+
 }
