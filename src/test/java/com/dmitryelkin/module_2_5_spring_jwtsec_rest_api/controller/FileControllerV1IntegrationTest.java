@@ -3,10 +3,8 @@ package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.FileServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,10 +38,6 @@ class FileControllerV1IntegrationTest {
 
     @MockBean
     AmazonS3 mockS3client;
-
-
-    @InjectMocks
-    private FileServiceImpl service;
 
 
     @Test
