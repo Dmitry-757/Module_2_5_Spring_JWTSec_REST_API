@@ -1,7 +1,5 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.TypeOfEvent;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceI;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.FileServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -61,15 +59,14 @@ public class FileControllerV1 {
                 .body(resource);
     }
 
-    @PostMapping(value = "/{fileName}"
+    @PostMapping(
 //            ,consumes = MediaType.MULTIPART_FORM_DATA
     )
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file){
-
         try {
             service.upload(file);
 
-            return ResponseEntity.ok()
+            return ResponseEntity.status(HttpStatus.CREATED)
                     .body("File uploaded");
         } catch (IOException e) {
             return ResponseEntity.badRequest()

@@ -41,7 +41,42 @@
             }
           }
         }
+      },
+      "post": {
+        "responses": {
+          "210": {
+            "description": "Успешный результат загрузки файла"
+          }
+        }
+      }
+
+    },
+    "/api/v1/files/{fileName}": {
+      "get": {
+        "parameters": [
+          {"name": "fileName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный результат получения файла по имени",
+            "content": {
+              "application/v1+json": {
+                "schema": {
+                    "type": "object"
+                }
+              },
+              "application/v2+json": {
+              }
+            }
+          }
+        }
       }
     }
+
   }
 }
