@@ -38,7 +38,7 @@ public class FileControllerV1 {
         }
     }
 
-    @GetMapping("/{fileName}")
+    @GetMapping("findByName/{fileName}")
     public ResponseEntity<?> getFilesByName(@PathVariable String fileName) {
         InputStream inputStream = service.download(fileName);
 

@@ -18,20 +18,11 @@
           "200": {
             "description": "Успешный результат получения списка файлов",
             "content": {
-              "application/v1+json": {
+              "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "name":{
-                        "type": "string",
-                        "title": "имя файла",
-                        "nullable": false,
-                        "example": "some file name )"
-                      }
-                    },
-                    "required": ["name"]
+                    "type": "string"
                   }
                 }
               },
@@ -51,11 +42,13 @@
       }
 
     },
-    "/api/v1/files/{fileName}": {
+    "/api/v1/files/findByName/": {
       "get": {
+        "summary": "получение файла по его имени",
         "parameters": [
           {"name": "fileName",
             "in": "query",
+            "description": "строковое значение, необходимое для получения файла",
             "schema": {
               "type": "string"
             }
