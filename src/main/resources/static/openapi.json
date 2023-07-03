@@ -42,13 +42,14 @@
       }
 
     },
-    "/api/v1/files/findByName/": {
+    "/api/v1/files/findByName/{fileName}": {
       "get": {
         "summary": "получение файла по его имени",
         "parameters": [
           {"name": "fileName",
-            "in": "query",
+            "in": "path",
             "description": "строковое значение, необходимое для получения файла",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -58,12 +59,12 @@
           "200": {
             "description": "Успешный результат получения файла по имени",
             "content": {
-              "application/v1+json": {
+              "application/octet-stream": {
                 "schema": {
                     "type": "object"
                 }
               },
-              "application/v2+json": {
+              "application/v2+octet-stream": {
               }
             }
           }

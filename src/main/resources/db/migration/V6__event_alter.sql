@@ -1,2 +1,2 @@
 ALTER TABLE events
-    ADD typeOfEvent VARCHAR(255) DEFAULT NULL;
+    ADD type_of_event VARCHAR(255) DEFAULT NULL;

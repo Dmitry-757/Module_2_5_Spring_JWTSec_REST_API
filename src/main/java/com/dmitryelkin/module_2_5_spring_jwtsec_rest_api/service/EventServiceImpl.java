@@ -4,9 +4,9 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.*;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.EventRepositoryI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -56,9 +56,9 @@ public class EventServiceImpl implements EventServiceI{
     }
 
     public void setNewEvent(File file, TypeOfEvent typeOfEvent){
-        Principal principal = (Principal) SecurityContextHolder.getContext()
+        UserDetails userFromSecurityContext = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
-        User user = userService.getByName(principal.getName());
+        User user = userService.getByName(userFromSecurityContext.getUsername());
         Event event = new Event(user, file, typeOfEvent);
         create(event);
     }

@@ -2,8 +2,12 @@ package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.EventRepositoryI;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +20,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +45,9 @@ class FileControllerV1IntegrationTest {
 
     @MockBean
     AmazonS3 mockS3client;
+
+    @MockBean
+    EventRepositoryI mockRepository;
 
 
     @Test
@@ -71,6 +81,8 @@ class FileControllerV1IntegrationTest {
 
         // when
         this.mockMvc.perform(requestBuilder)
+
+                // then
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(items)))
                 .andExpect(openApi().isValid("static/openapi.json"));
@@ -78,7 +90,36 @@ class FileControllerV1IntegrationTest {
     }
 
     @Test
-    void getFilesByName() {
+    @WithMockUser()
+    void getFilesByName() throws Exception {
+        // given
+        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/files/findByName/fileName1");
+        S3Object s3object = new S3Object();
+
+        String name = "fileName1";
+        String fileBody = "some char file";
+        byte[] initialArray = fileBody.getBytes(StandardCharsets.UTF_8);
+        InputStream inputStream = new ByteArrayInputStream(initialArray);
+        S3ObjectInputStream targetStream = new S3ObjectInputStream(inputStream, new HttpRequestBase() {
+            @Override
+            public String getMethod() {
+                return null;
+            }
+        });
+
+        s3object.setObjectContent(targetStream);
+
+        Mockito.doReturn(true).when(mockS3client).doesObjectExist(bucketName, name);
+        Mockito.doReturn(s3object).when(mockS3client).getObject(bucketName, name);
+
+
+        // when
+        this.mockMvc.perform(requestBuilder)
+
+                // then
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(openApi().isValid("static/openapi.json"));
+
     }
 
     @Test
