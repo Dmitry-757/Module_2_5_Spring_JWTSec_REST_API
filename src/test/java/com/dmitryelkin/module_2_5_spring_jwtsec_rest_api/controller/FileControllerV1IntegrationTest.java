@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.EventRepositoryI;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,12 +16,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -28,7 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.atlassian.oai.validator.mockmvc.OpenApiValidationMatchers.openApi;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -83,7 +89,7 @@ class FileControllerV1IntegrationTest {
         this.mockMvc.perform(requestBuilder)
 
                 // then
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(items)))
                 .andExpect(openApi().isValid("static/openapi.json"));
 
@@ -117,13 +123,57 @@ class FileControllerV1IntegrationTest {
         this.mockMvc.perform(requestBuilder)
 
                 // then
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(openApi().isValid("static/openapi.json"));
 
     }
 
     @Test
-    void uploadFile() {
+    @WithMockUser(roles = "ADMIN")
+    void uploadFile() throws Exception {
+        // given
+        MockMultipartFile myMockFile
+                = new MockMultipartFile(
+                "file",
+                "hello.txt",
+                MediaType.TEXT_PLAIN_VALUE,
+                "Hello, World!".getBytes()
+        );
+        // when
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                        .multipart("/api/v1/files/")
+                        .file(myMockFile)
+                        .accept(MediaType.TEXT_PLAIN_VALUE)
+                        )
+                // then
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    public void uploadWithRestAssured(){
+        /*
+         * Set a {org.springframework.test.web.servlet.MockMvc} instance that REST Assured will use when making requests unless overwritten
+         * by a { MockMvcRequestSpecification}.
+         *
+         * @param mockMvc The MockMvc instance to use.
+         */
+        RestAssuredMockMvc.mockMvc(mockMvc);
+
+        File testFile = new File("D:\\proselyte.txt");
+        io.restassured.module.mockmvc.response.MockMvcResponse response = RestAssuredMockMvc
+                .given()
+                .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
+                .multiPart("file", testFile)
+                .contentType(MediaType.TEXT_PLAIN_VALUE)
+                .accept(MediaType.TEXT_PLAIN_VALUE)
+                .when()
+                .request("PUT", "/api/v1/events/")
+                .then()
+                .extract()
+                .response();
+
+        assertEquals(200, response.statusCode());
     }
 
     @Test

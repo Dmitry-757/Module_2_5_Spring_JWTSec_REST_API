@@ -60,13 +60,14 @@ public class FileControllerV1 {
     }
 
     @PostMapping(
+//            consumes = MediaType.TEXT_PLAIN_VALUE
 //            ,consumes = MediaType.MULTIPART_FORM_DATA
     )
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file){
         try {
             service.upload(file);
 
-            return ResponseEntity.status(HttpStatus.CREATED)
+            return ResponseEntity.status(HttpStatus.OK)
                     .body("File uploaded");
         } catch (IOException e) {
             return ResponseEntity.badRequest()
