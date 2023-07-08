@@ -18,5 +18,5 @@ public interface EventServiceI {
     Event getById(long id);
     Event getByUser(User user);
 
-    void setNewEvent(File file, TypeOfEvent typeOfEvent);
+    Event setNewEvent(File file, TypeOfEvent typeOfEvent);
 }

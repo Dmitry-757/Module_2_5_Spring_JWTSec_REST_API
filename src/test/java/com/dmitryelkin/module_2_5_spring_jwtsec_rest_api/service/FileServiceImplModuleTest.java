@@ -5,15 +5,22 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Status;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.FileRepositoryI;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -23,7 +30,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-@ExtendWith(MockitoExtension.class)
+//@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class FileServiceImplModuleTest {
 
     @Value("${aws.bucketName}")
@@ -31,8 +39,16 @@ class FileServiceImplModuleTest {
 
     private final AmazonS3 s3client = Mockito.mock(AmazonS3.class);
 
+
+    @Mock
+    private EventServiceI eventService = Mockito.mock(EventServiceI.class);
+
+    @Mock
+    private FileRepositoryI repository = Mockito.mock(FileRepositoryI.class);
+
     @InjectMocks
     private FileServiceImpl service;
+
 
     @Test
     void getAll() {
@@ -95,6 +111,27 @@ class FileServiceImplModuleTest {
         assertEquals(response, targetStream);
     }
 
+    @Test
+    void upload() throws IOException {
+
+        // given
+        MultipartFile file = new MockMultipartFile(
+                "file",
+                "fileName.txt",
+                MediaType.TEXT_PLAIN_VALUE,
+                "Hello, World!".getBytes()
+        );
+        File modelFile = new File(file.getName(), bucketName+".s3.amazonaws.com/"+file.getName());
+        File expected = new File(123L, file.getName(), bucketName+".s3.amazonaws.com/"+file.getName(), Status.ACTIVE);
+        Mockito.doReturn(expected).when(repository).saveAndFlush(modelFile);
+
+        // when
+        var actual = service.upload(file);
+
+        // then
+        assertEquals(expected, actual);
+
+    }
     @Test
     void delete() {
     }

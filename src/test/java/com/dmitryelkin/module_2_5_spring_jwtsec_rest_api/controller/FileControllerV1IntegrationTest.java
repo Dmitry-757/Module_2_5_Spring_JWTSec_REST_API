@@ -144,10 +144,10 @@ class FileControllerV1IntegrationTest {
                 MockMvcRequestBuilders
                         .multipart("/api/v1/files/")
                         .file(myMockFile)
-                        .accept(MediaType.TEXT_PLAIN_VALUE)
+//                        .accept(MediaType.TEXT_PLAIN_VALUE)
                         )
                 // then
-                .andExpect(status().is(200));
+                .andExpect(status().is(201));
     }
 
     @Test
@@ -161,19 +161,22 @@ class FileControllerV1IntegrationTest {
         RestAssuredMockMvc.mockMvc(mockMvc);
 
         File testFile = new File("D:\\proselyte.txt");
-        io.restassured.module.mockmvc.response.MockMvcResponse response = RestAssuredMockMvc
+        io.restassured.module.mockmvc.response.MockMvcResponse response =
+                RestAssuredMockMvc
                 .given()
                 .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
                 .multiPart("file", testFile)
-                .contentType(MediaType.TEXT_PLAIN_VALUE)
-                .accept(MediaType.TEXT_PLAIN_VALUE)
+
+                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.TEXT_PLAIN_VALUE)
                 .when()
-                .request("PUT", "/api/v1/events/")
+                .request("POST", "/api/v1/files/")
                 .then()
+                .statusCode(201)
                 .extract()
                 .response();
 
-        assertEquals(200, response.statusCode());
+        assertEquals(201, response.statusCode());
     }
 
     @Test

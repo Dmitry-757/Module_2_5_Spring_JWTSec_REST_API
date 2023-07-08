@@ -9,13 +9,12 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.TypeOfEvent;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.FileRepositoryI;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +26,12 @@ public class FileServiceImpl implements FileServiceI {
 
     private final EventServiceI eventService;
 
-    @Value("${aws.bucketName}")
-    private String bucketName;
+//    @Value("${aws.bucketName}")
+    private String bucketName = "myBucketName";
+
+//    @Value("${fileService.tmpFilePath}")
+    private String tmpFilePath = "d:\\uploadingFile.tmp";
+
 
     @Autowired
     public FileServiceImpl(FileRepositoryI repository, AmazonS3 s3client, EventServiceI eventService) {
@@ -37,21 +40,41 @@ public class FileServiceImpl implements FileServiceI {
         this.eventService = eventService;
     }
 
+//    @Value("${fileService.tmpFilePath}")
+//    private void setPropertyBucketName(String value){
+//        this.tmpFilePath = value;
+//    }
+
 
     @Override
-    public void upload(MultipartFile file) throws IOException {
-        java.io.File uploadingFile = file.getResource().getFile();
+    public File upload(MultipartFile multipartFile) {
+//        java.io.File uploadingFile = file.getResource().getFile();
+        java.io.File targetFile = new java.io.File( tmpFilePath);
+
+        try(OutputStream outputStream = new FileOutputStream(targetFile)){
+            IOUtils.copy(multipartFile.getInputStream(), outputStream);
+        } catch (FileNotFoundException e) {
+            // handle exception here
+            log.info("During uploading File : {} FileNotFoundException was occurred {}", multipartFile.getName(), e.getMessage());
+
+        } catch (IOException e) {
+            // handle exception here
+            log.info("During uploading File : {} IOException was occurred {}", multipartFile.getName(), e.getMessage());
+        }
         s3client.putObject(
                 bucketName,
-                file.getName(),
-                uploadingFile);
-        File modelFile = new File(file.getName(), bucketName+".s3.amazonaws.com/"+file.getName());
-        repository.saveAndFlush(modelFile);
-        eventService.setNewEvent(modelFile, TypeOfEvent.UPLOAD);
+                multipartFile.getName(),
+                targetFile);
+        File modelFile = new File(multipartFile.getName(), bucketName+".s3.amazonaws.com/"+multipartFile.getName());
+        File savedModelFile = repository.saveAndFlush(modelFile);
+        eventService.setNewEvent(savedModelFile, TypeOfEvent.UPLOAD);
+
+        return savedModelFile;
     }
 
     @Override
     public List<String> getAll() {
+
         ObjectListing objects = s3client.listObjects(bucketName);
         List<String> result = new ArrayList<>();
         for (S3ObjectSummary objectSummary : objects.getObjectSummaries()) {

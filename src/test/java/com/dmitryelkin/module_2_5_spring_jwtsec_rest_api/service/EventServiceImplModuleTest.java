@@ -26,14 +26,15 @@ class EventServiceImplModuleTest {
     @Test
     void create() {
         // given
-        Event item1 = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
-        Mockito.doReturn(item1).when(repository).saveAndFlush(item1);
+        Event item = new Event(LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
+        Event expected = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
+        Mockito.doReturn(expected).when(repository).saveAndFlush(item);
 
         // when
-        var responseEntity = service.create(item1);
+        var responseEntity = service.create(item);
 
         // then
-        assertEquals(item1, responseEntity);
+        assertEquals(expected, responseEntity);
     }
 
     @Test

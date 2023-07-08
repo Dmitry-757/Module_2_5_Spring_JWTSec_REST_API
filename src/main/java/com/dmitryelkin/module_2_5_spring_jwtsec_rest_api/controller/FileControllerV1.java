@@ -67,13 +67,12 @@ public class FileControllerV1 {
         try {
             service.upload(file);
 
-            return ResponseEntity.status(HttpStatus.OK)
+            return ResponseEntity.status(HttpStatus.CREATED)
                     .body("File uploaded");
         } catch (IOException e) {
             return ResponseEntity.badRequest()
                     .body(e.getMessage());
         }
-
     }
 
     @DeleteMapping("/{fileName}")

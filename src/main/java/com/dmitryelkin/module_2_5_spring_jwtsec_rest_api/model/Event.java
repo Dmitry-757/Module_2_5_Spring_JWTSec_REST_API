@@ -47,6 +47,14 @@ public class Event {
         this.status = Status.ACTIVE;
     }
 
+    public Event(LocalDateTime eventDateTime, User user, File file, Status status, TypeOfEvent typeOfEvent) {
+        this.eventDateTime = eventDateTime;
+        this.user = user;
+        this.file = file;
+        this.typeOfEvent = typeOfEvent;
+        this.status = status;
+    }
+
 
 //    @Override
 //    public boolean equals(Object o) {

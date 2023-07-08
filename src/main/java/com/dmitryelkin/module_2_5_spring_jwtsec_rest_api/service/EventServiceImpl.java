@@ -55,11 +55,11 @@ public class EventServiceImpl implements EventServiceI{
         return repository.findByUser(user).orElse(null);
     }
 
-    public void setNewEvent(File file, TypeOfEvent typeOfEvent){
+    public Event setNewEvent(File file, TypeOfEvent typeOfEvent){
         UserDetails userFromSecurityContext = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
         User user = userService.getByName(userFromSecurityContext.getUsername());
         Event event = new Event(user, file, typeOfEvent);
-        create(event);
+        return create(event);
     }
 }
