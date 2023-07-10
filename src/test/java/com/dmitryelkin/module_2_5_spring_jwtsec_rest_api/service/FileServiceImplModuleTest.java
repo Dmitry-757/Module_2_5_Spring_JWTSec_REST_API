@@ -33,9 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //@ExtendWith(MockitoExtension.class)
 //@SpringBootTest(classes = {FileServiceImplModuleTest.class, FileServiceImpl.class, FileRepositoryI.class})
-//@SpringBootTest()
 @SpringBootConfiguration
-@SpringBootTest()
+@SpringBootTest
 class FileServiceImplModuleTest {
 
     @Value("${aws.bucketName}")
