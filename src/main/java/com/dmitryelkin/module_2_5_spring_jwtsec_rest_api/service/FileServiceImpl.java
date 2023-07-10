@@ -11,6 +11,7 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.FileReposito
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,11 +27,13 @@ public class FileServiceImpl implements FileServiceI {
 
     private final EventServiceI eventService;
 
-//    @Value("${aws.bucketName}")
-    private String bucketName = "myBucketName";
+    @Value("${aws.bucketName}")
+    private String bucketName;
+//    private String bucketName = "myBucketName";
 
-//    @Value("${fileService.tmpFilePath}")
-    private String tmpFilePath = "d:\\uploadingFile.tmp";
+    @Value("${fileService.tmpFilePath}")
+    private String tmpFilePath;
+//    private String tmpFilePath = "d:\\uploadingFile.tmp";
 
 
     @Autowired

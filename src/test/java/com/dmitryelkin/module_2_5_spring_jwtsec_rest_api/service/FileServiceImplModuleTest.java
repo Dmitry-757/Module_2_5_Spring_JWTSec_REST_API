@@ -14,13 +14,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -31,11 +32,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 //@ExtendWith(MockitoExtension.class)
-@SpringBootTest
+//@SpringBootTest(classes = {FileServiceImplModuleTest.class, FileServiceImpl.class, FileRepositoryI.class})
+//@SpringBootTest()
+@SpringBootConfiguration
+@SpringBootTest()
 class FileServiceImplModuleTest {
 
     @Value("${aws.bucketName}")
     private String bucketName;
+    @Value("${fileService.tmpFilePath}")
+    private String tmpFilePath;
 
     private final AmazonS3 s3client = Mockito.mock(AmazonS3.class);
 
@@ -53,6 +59,7 @@ class FileServiceImplModuleTest {
     @Test
     void getAll() {
         // given
+        ReflectionTestUtils.setField(service, "bucketName", bucketName);
         List<String> expectedResult = List.of("file1", "file2", "file3");
 
         List<S3ObjectSummary> mockResult = new ArrayList<>();
@@ -87,6 +94,7 @@ class FileServiceImplModuleTest {
     @Test
     void download() {
         // given
+        ReflectionTestUtils.setField(service, "bucketName", bucketName);
         S3Object s3object = new S3Object();
 
         String name = "fileName1";
@@ -112,9 +120,10 @@ class FileServiceImplModuleTest {
     }
 
     @Test
-    void upload() throws IOException {
-
+    void upload() {
         // given
+        ReflectionTestUtils.setField(service, "bucketName", bucketName);
+        ReflectionTestUtils.setField(service, "tmpFilePath", tmpFilePath);
         MultipartFile file = new MockMultipartFile(
                 "file",
                 "fileName.txt",
