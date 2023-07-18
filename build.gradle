@@ -25,6 +25,14 @@ ext{
 
 }
 
+bootBuildImage {
+    imageName = "eu.gcr.io/company/imagename"
+//    builder = "paketobuildpacks/builder:tiny"
+    if (System.getenv("IMAGE_TAGS")) {
+        tags = (System.getenv("IMAGE_TAGS").split(",") as List<String>).collect { "${imageName.get()}:$it" }
+    }
+}
+
 dependencies {
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-gradle-plugin
 //    implementation group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${springBootVersion}"
@@ -68,6 +76,8 @@ dependencies {
     implementation group: 'com.atlassian.oai', name: 'swagger-request-validator-restassured', version: '2.35.1'
 
 }
+
+
 
 tasks.named('test') {
     useJUnitPlatform()
