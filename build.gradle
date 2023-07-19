@@ -74,7 +74,6 @@ dependencies {
     implementation group: 'com.atlassian.oai', name: 'swagger-request-validator-mockmvc', version: '2.35.1'
 // https://mvnrepository.com/artifact/com.atlassian.oai/swagger-request-validator-restassured
     implementation group: 'com.atlassian.oai', name: 'swagger-request-validator-restassured', version: '2.35.1'
-
 }
 
 
