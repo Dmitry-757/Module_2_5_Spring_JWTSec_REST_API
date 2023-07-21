@@ -5,10 +5,12 @@ services:
 #    restart: always
     ports:
       - "8090:8090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://docker-mysql:3306/proselyte_module_2_5_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
     depends_on:
-      - mysql_db
+      - docker-mysql
     command: sh -c './wait-for mysql_db:3306 -- npm start'
-  mysql_db:
+  docker-mysql:
     image: "mysql:8.0"
 #    restart: always
     ports:
@@ -16,4 +18,5 @@ services:
     environment:
       MYSQL_DATABASE: proselyte_module_2_5_db
 #      MYSQL_USER: root
+      MYSQL_PASSWORD: dingo1975
       MYSQL_ROOT_PASSWORD: dingo1975
