@@ -7,6 +7,8 @@ services:
       - "8090:8090"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://docker-mysql:3306/proselyte_module_2_5_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+      envar.awsaccessKey: "myawsaccessKey"
+      envar.awssecretKey: "myawssecretKey"
     depends_on:
       - docker-mysql
     command: sh -c './wait-for mysql_db:3306 -- npm start'
