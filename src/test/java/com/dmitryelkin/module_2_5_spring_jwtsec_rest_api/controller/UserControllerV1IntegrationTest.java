@@ -21,6 +21,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -36,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(properties = {"spring.config.location=classpath:application.properties"})
 @AutoConfigureMockMvc
 class UserControllerV1IntegrationTest {
 
@@ -192,28 +194,27 @@ class UserControllerV1IntegrationTest {
         Mockito.doReturn(deletedUser).when(mockRepository).saveAndFlush(user);
         Mockito.doReturn(Optional.of(user)).when(mockRepository).findById(444L);
 
-
         // when
-//        MockMvcResponse response = RestAssuredMockMvc
-//                .given()
-//                .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
-//                .contentType(ContentType.JSON)
-//                .body(user)
-//                .when()
-//                .request("DELETE", "/api/v1/users/444")
-//                .then()
-//                .extract()
-//                .response();
-//        // then
-//        assertEquals(response.statusCode(),HttpStatus.OK.value());
-//        assertEquals(response.as(User.class), deletedUser);
+        MockMvcResponse response = RestAssuredMockMvc
+                .given()
+                .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
+                .contentType(ContentType.JSON)
+                .body(user)
+                .when()
+                .request("DELETE", "/api/v1/users/444")
+                .then()
+                .extract()
+                .response();
+        // then
+        assertEquals(response.statusCode(),HttpStatus.OK.value());
+        assertEquals(response.as(User.class), deletedUser);
+
 
 
         // given
         Mockito.doReturn(Optional.empty()).when(mockRepository).findById(445L);
-
         // when
-        MockMvcResponse response = RestAssuredMockMvc
+        response = RestAssuredMockMvc
                 .given()
                 .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
                 .contentType(ContentType.JSON)
@@ -224,7 +225,7 @@ class UserControllerV1IntegrationTest {
                 .extract()
                 .response();
         // then
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
+        assertEquals(204, response.statusCode());
         assertEquals("No such item for deleting", response.getBody().asString());
     }
 }

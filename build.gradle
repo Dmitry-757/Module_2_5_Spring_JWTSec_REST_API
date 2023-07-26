@@ -1,13 +1,11 @@
 plugins {
     id 'java'
-//    id 'org.springframework.boot' version '3.0.5'
     id("org.springframework.boot") version "3.1.0"
     id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'com.DmitryElkin'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
@@ -26,16 +24,14 @@ ext{
 }
 
 bootBuildImage {
-    imageName = "eu.gcr.io/company/imagename"
+    imageName = "com.dmitryelkin.module_2_5_spring_jwtsec_rest_api"
 //    builder = "paketobuildpacks/builder:tiny"
-    if (System.getenv("IMAGE_TAGS")) {
-        tags = (System.getenv("IMAGE_TAGS").split(",") as List<String>).collect { "${imageName.get()}:$it" }
-    }
+//    if (System.getenv("IMAGE_TAGS")) {
+//        tags = (System.getenv("IMAGE_TAGS").split(",") as List<String>).collect { "${imageName.get()}:$it" }
+//    }
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-gradle-plugin
-//    implementation group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${springBootVersion}"
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -45,9 +41,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation "mysql:mysql-connector-java:${mySQLConnectorVersion}"
 
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: "${springBootVersion}"
-    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: "${springSecirityVersion}"
 
 
@@ -62,17 +56,12 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
-    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
     testImplementation group: 'io.rest-assured', name: 'rest-assured', version: "${restAssuredVersion}"
-// https://mvnrepository.com/artifact/io.rest-assured/spring-mock-mvc
     testImplementation group: 'io.rest-assured', name: 'spring-mock-mvc', version: "${restAssuredVersion}"
 
     implementation group: 'io.rest-assured', name: 'rest-assured', version: "${restAssuredVersion}"
 
-// https://mvnrepository.com/artifact/com.atlassian.oai/swagger-request-validator-mockmvc
     implementation group: 'com.atlassian.oai', name: 'swagger-request-validator-mockmvc', version: '2.35.1'
-// https://mvnrepository.com/artifact/com.atlassian.oai/swagger-request-validator-restassured
     implementation group: 'com.atlassian.oai', name: 'swagger-request-validator-restassured', version: '2.35.1'
 }
 
