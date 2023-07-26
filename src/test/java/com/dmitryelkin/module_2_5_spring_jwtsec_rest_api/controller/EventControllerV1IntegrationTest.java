@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = {"spring.config.location=classpath:application.properties"})
 @AutoConfigureMockMvc
 @EnableAutoConfiguration(exclude=FlywayAutoConfiguration.class)
-class EventControllerV1IntegrationTest {
+class EventControllerV1IntegrationTest extends SpringBootApplicationTest {
     @Autowired
     private MockMvc mockMvc;
 

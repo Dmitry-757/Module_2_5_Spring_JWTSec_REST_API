@@ -56,13 +56,18 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: "${restAssuredVersion}"
-    testImplementation group: 'io.rest-assured', name: 'spring-mock-mvc', version: "${restAssuredVersion}"
-
     implementation group: 'io.rest-assured', name: 'rest-assured', version: "${restAssuredVersion}"
 
     implementation group: 'com.atlassian.oai', name: 'swagger-request-validator-mockmvc', version: '2.35.1'
     implementation group: 'com.atlassian.oai', name: 'swagger-request-validator-restassured', version: '2.35.1'
+
+
+    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: "${restAssuredVersion}"
+    testImplementation group: 'io.rest-assured', name: 'spring-mock-mvc', version: "${restAssuredVersion}"
+
+    testImplementation 'org.testcontainers:mysql:1.18.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.18.3'
+
 }
 
 
