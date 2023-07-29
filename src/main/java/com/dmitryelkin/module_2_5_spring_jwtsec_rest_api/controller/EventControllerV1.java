@@ -1,6 +1,7 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.EventDTO;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.errorhandling.ApiException;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Event;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +57,17 @@ public class EventControllerV1 {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Event> createItem(@RequestBody Event item) {
+    public ResponseEntity<Event> createItem(@RequestBody Event item) throws ApiException {
         if (item != null) {
             Event newItem = service.create(item);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(newItem);
         } else {
-            return ResponseEntity
-                    .noContent()
-                    .build();
+//            return ResponseEntity
+//                    .noContent()
+//                    .build();
+            throw new ApiException("bad item in request!",HttpStatus.BAD_REQUEST.value());
         }
     }
 
