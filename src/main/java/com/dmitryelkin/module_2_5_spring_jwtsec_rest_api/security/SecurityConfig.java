@@ -1,12 +1,15 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.security;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.Role;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -14,6 +17,10 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    @Qualifier("delegatedAuthenticationEntryPoint")
+//    @Qualifier("customAuthenticationEntryPoint")
+    AuthenticationEntryPoint authEntryPoint;
     private final UserAuthenticationProvider userAuthenticationProvider;
 
     public SecurityConfig(UserAuthenticationProvider userAuthenticationProvider) {
@@ -74,11 +81,14 @@ public class SecurityConfig {
 
                         .anyRequest().authenticated()
                 )
-//                .exceptionHandling(exceptionHandling -> exceptionHandling
-//                        .accessDeniedHandler(((request, response, accessDeniedException) ->
-//                        {accessDeniedException.printStackTrace();
-//                            System.out.println(accessDeniedException.getMessage());}))
-//                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler(((request, response, accessDeniedException) ->
+                        {accessDeniedException.printStackTrace();
+                            System.out.println(accessDeniedException.getMessage());}))
+//                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+//                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .authenticationEntryPoint(authEntryPoint)
+                )
         ;
         return http.build();
     }
