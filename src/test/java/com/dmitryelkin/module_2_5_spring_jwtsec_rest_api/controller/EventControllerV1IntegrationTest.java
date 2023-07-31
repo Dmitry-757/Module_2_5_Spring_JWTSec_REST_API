@@ -4,7 +4,6 @@ import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.EventDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.*;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.EventRepositoryI;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.UserRepositoryI;
-import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceI;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
