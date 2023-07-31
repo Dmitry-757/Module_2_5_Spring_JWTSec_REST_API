@@ -22,7 +22,8 @@ public class EventServiceImpl implements EventServiceI{
 
     @Override
     public Event create(Event item) {
-        return repository.saveAndFlush(item);
+        Event result = repository.saveAndFlush(item);
+        return result;
     }
 
     @Override

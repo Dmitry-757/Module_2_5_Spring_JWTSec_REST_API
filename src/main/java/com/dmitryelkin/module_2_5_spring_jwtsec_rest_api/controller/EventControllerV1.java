@@ -67,7 +67,7 @@ public class EventControllerV1 {
 //            return ResponseEntity
 //                    .noContent()
 //                    .build();
-            throw new ApiException("bad item in request!",HttpStatus.BAD_REQUEST.value());
+            throw new ApiException("item is absent in request!",HttpStatus.BAD_REQUEST.value());
         }
     }
 

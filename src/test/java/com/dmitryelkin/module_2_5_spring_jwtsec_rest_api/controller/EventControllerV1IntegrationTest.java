@@ -3,6 +3,9 @@ package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.EventDTO;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.*;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.EventRepositoryI;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.UserRepositoryI;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceI;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -10,11 +13,11 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -45,6 +48,16 @@ class EventControllerV1IntegrationTest extends SpringBootApplicationTest {
 
     @MockBean
     EventRepositoryI mockRepository;
+
+    @MockBean
+    UserRepositoryI mockUserRepository;
+
+//    @MockBean
+//    EventServiceI mockEventService;
+
+    @InjectMocks
+    private EventServiceImpl service;
+
 
     @LocalServerPort
     int port;
@@ -99,8 +112,10 @@ class EventControllerV1IntegrationTest extends SpringBootApplicationTest {
     void createItem() {
         RestAssuredMockMvc.mockMvc(mockMvc);
         // given
-        Event item = new Event(123L, LocalDateTime.now(), new User("userName1", "pass1"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
+        User user = new User("userName1", "pass1");
+        Event item = new Event(123L, LocalDateTime.now(), user, new File(), Status.ACTIVE, TypeOfEvent.FORTEST);
         Mockito.doReturn(item).when(mockRepository).saveAndFlush(item);
+
         MockMvcResponse response = RestAssuredMockMvc
                 .given()
                 .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
