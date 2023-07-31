@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -180,7 +181,16 @@ class FileControllerV1IntegrationTest extends SpringBootApplicationTest{
          */
         RestAssuredMockMvc.mockMvc(mockMvc);
 
-        File testFile = new File("D:\\proselyte.txt");
+//        File testFile = new File("D:\\proselyte.txt");
+        File tempFile = null;
+        try{
+            tempFile = File.createTempFile("myTempFile" , ".txt");
+//            System.out.println("Temp file created : " +
+//                    tempFile.getAbsolutePath());
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
         MockMultipartFile myMockFile
                 = new MockMultipartFile(
                 "file",
@@ -198,7 +208,7 @@ class FileControllerV1IntegrationTest extends SpringBootApplicationTest{
                 RestAssuredMockMvc
                 .given()
                 .auth().with(SecurityMockMvcRequestPostProcessors.user("user").password("pass345").roles("ADMIN"))
-                .multiPart("file", testFile)
+                .multiPart("file", tempFile)
 
                 .contentType(MediaType.APPLICATION_JSON)
 //                .accept(MediaType.TEXT_PLAIN_VALUE)
