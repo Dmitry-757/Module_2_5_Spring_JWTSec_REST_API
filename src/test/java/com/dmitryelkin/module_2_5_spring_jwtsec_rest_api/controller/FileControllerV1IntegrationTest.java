@@ -5,7 +5,10 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.TypeOfEvent;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.EventRepositoryI;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.repository.FileRepositoryI;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.EventServiceI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -60,6 +63,12 @@ class FileControllerV1IntegrationTest extends SpringBootApplicationTest{
 
     @MockBean
     EventRepositoryI mockRepository;
+
+    @MockBean
+    FileRepositoryI mockFileRepository;
+
+    @MockBean
+    EventServiceI mockEventService;
 
 
     @Test
@@ -145,6 +154,11 @@ class FileControllerV1IntegrationTest extends SpringBootApplicationTest{
                 MediaType.TEXT_PLAIN_VALUE,
                 "Hello, World!".getBytes()
         );
+        com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File modelFile =
+                new com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File(myMockFile.getName(),
+                        bucketName+".s3.amazonaws.com/"+myMockFile.getName());
+        Mockito.doReturn(modelFile).when(mockFileRepository).saveAndFlush(modelFile);
+        Mockito.doReturn(null).when(mockEventService).setNewEvent(modelFile, TypeOfEvent.UPLOAD);
         // when
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -167,6 +181,19 @@ class FileControllerV1IntegrationTest extends SpringBootApplicationTest{
         RestAssuredMockMvc.mockMvc(mockMvc);
 
         File testFile = new File("D:\\proselyte.txt");
+        MockMultipartFile myMockFile
+                = new MockMultipartFile(
+                "file",
+                "hello.txt",
+                MediaType.TEXT_PLAIN_VALUE,
+                "Hello, World!".getBytes()
+        );
+        com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File modelFile =
+                new com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.File(myMockFile.getName(),
+                        bucketName+".s3.amazonaws.com/"+myMockFile.getName());
+        Mockito.doReturn(modelFile).when(mockFileRepository).saveAndFlush(modelFile);
+        Mockito.doReturn(null).when(mockEventService).setNewEvent(modelFile, TypeOfEvent.UPLOAD);
+
         io.restassured.module.mockmvc.response.MockMvcResponse response =
                 RestAssuredMockMvc
                 .given()
