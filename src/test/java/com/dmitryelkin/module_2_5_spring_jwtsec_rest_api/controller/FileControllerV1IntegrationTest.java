@@ -165,7 +165,6 @@ class FileControllerV1IntegrationTest extends SpringBootApplicationTest{
                 MockMvcRequestBuilders
                         .multipart("/api/v1/files/")
                         .file(myMockFile)
-//                        .accept(MediaType.TEXT_PLAIN_VALUE)
                         )
                 // then
                 .andExpect(status().is(201));
@@ -181,12 +180,9 @@ class FileControllerV1IntegrationTest extends SpringBootApplicationTest{
          */
         RestAssuredMockMvc.mockMvc(mockMvc);
 
-//        File testFile = new File("D:\\proselyte.txt");
         File tempFile = null;
         try{
             tempFile = File.createTempFile("myTempFile" , ".txt");
-//            System.out.println("Temp file created : " +
-//                    tempFile.getAbsolutePath());
         } catch (IOException e){
             e.printStackTrace();
         }
