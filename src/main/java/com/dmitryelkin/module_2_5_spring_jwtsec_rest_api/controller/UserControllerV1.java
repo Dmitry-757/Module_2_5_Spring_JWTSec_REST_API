@@ -1,6 +1,7 @@
 package com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.controller;
 
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.DTO.UserDTO;
+import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.errorhandling.ApiException;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.model.User;
 import com.dmitryelkin.module_2_5_spring_jwtsec_rest_api.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +35,7 @@ public class UserControllerV1 {
                                     .toList()
                     );
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
-
+            throw new ApiException("users was not found!",HttpStatus.NOT_FOUND.value());
         }
     }
 
@@ -50,10 +48,7 @@ public class UserControllerV1 {
                     .status(HttpStatus.OK)
                     .body(dto);
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
-
+            throw new ApiException("user was not found!",HttpStatus.NOT_FOUND.value());
         }
     }
 
@@ -66,10 +61,7 @@ public class UserControllerV1 {
                     .status(HttpStatus.OK)
                     .body(dto);
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
-
+            throw new ApiException("user was not found!",HttpStatus.BAD_REQUEST.value());
         }
     }
 
@@ -83,9 +75,7 @@ public class UserControllerV1 {
                     .status(HttpStatus.CREATED)
                     .body(newItem);
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
+            throw new ApiException("bad item was  passed!",HttpStatus.BAD_REQUEST.value());
         }
     }
 
@@ -99,15 +89,11 @@ public class UserControllerV1 {
                         .status(HttpStatus.OK)
                         .body(updatingItem);
             } else {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body("No such item for update");
+                throw new ApiException("No such item for update!",HttpStatus.BAD_REQUEST.value());
             }
 
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
+            throw new ApiException("bad item was  passed!",HttpStatus.BAD_REQUEST.value());
         }
     }
 
@@ -122,17 +108,12 @@ public class UserControllerV1 {
                         .status(HttpStatus.OK)
                         .body(deletingItem);
             } else {
-                return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
-                        .body("No such item for deleting");
+                throw new ApiException("No such item for deleting!", HttpStatus.NOT_FOUND.value());
             }
 
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body("id is not correct");
+            throw new ApiException("id is not correct!",HttpStatus.BAD_REQUEST.value());
         }
     }
-
 
 }

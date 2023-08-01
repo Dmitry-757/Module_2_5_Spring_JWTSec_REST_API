@@ -64,9 +64,6 @@ public class EventControllerV1 {
                     .status(HttpStatus.CREATED)
                     .body(newItem);
         } else {
-//            return ResponseEntity
-//                    .noContent()
-//                    .build();
             throw new ApiException("item is absent in request!",HttpStatus.BAD_REQUEST.value());
         }
     }
@@ -81,14 +78,10 @@ public class EventControllerV1 {
                         .status(HttpStatus.OK)
                         .body(updatingItem);
             } else {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body("No such item for update");
+                throw new ApiException("No such item for update!",HttpStatus.BAD_REQUEST.value());
             }
         }else {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
+            throw new ApiException("bad item for update!",HttpStatus.BAD_REQUEST.value());
         }
     }
 
@@ -96,7 +89,6 @@ public class EventControllerV1 {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         if (id != null) {
-
             Event deletingItem = service.delete(id);
 
             if (deletingItem != null) {
@@ -104,14 +96,10 @@ public class EventControllerV1 {
                     .status(HttpStatus.OK)
                     .body(deletingItem);
             }else {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body("No such item for deleting");
+                throw new ApiException("No such item for deleting!",HttpStatus.BAD_REQUEST.value());
             }
         }else{
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
+            throw new ApiException("bad id of item for deleting!",HttpStatus.BAD_REQUEST.value());
         }
     }
 
