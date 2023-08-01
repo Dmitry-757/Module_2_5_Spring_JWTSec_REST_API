@@ -182,7 +182,7 @@ class UserControllerV1IntegrationTest extends SpringBootApplicationTest{
 
         // then
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
-        assertEquals(response.getBody().asString(),"No such item for update");
+        assertEquals("{\"message\":\"No such item for update!\"}",response.getBody().asString());
 
     }
 
@@ -226,7 +226,7 @@ class UserControllerV1IntegrationTest extends SpringBootApplicationTest{
                 .extract()
                 .response();
         // then
-        assertEquals(204, response.statusCode());
-        assertEquals("No such item for deleting", response.getBody().asString());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+        assertEquals("{\"message\":\"No such item for deleting!\"}", response.getBody().asString());
     }
 }

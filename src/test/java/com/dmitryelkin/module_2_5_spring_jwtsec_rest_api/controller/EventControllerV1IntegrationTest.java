@@ -173,7 +173,7 @@ class EventControllerV1IntegrationTest extends SpringBootApplicationTest {
 
         // then
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
-        assertEquals(response.getBody().asString(),"No such item for update");
+        assertEquals(response.getBody().asString(),"{\"message\":\"No such item for update!\"}");
 
     }
 
@@ -205,7 +205,7 @@ class EventControllerV1IntegrationTest extends SpringBootApplicationTest {
                 .response();
         // then
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
-        assertEquals("No such item for deleting", response.getBody().asString());
+        assertEquals("{\"message\":\"No such item for deleting!\"}", response.getBody().asString());
 
     }
 }

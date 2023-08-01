@@ -22,13 +22,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<Response> myAppException(ApiException exception){
         return ResponseEntity
-                .status(500)
-                .body(new Response("some error was occurred: "+exception.getMessage()));
+                .status(exception.getErrorCode())
+                .body(new Response(exception.getMessage()));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> myAccessDeniedException(AccessDeniedException exception){
-        return new ResponseEntity<Object>(
+        return new ResponseEntity<>(
                 "Access denied ", new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
@@ -39,7 +39,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 "exception",
                 exception.getMessage());
 
-        return new ResponseEntity<Object>(
+        return new ResponseEntity<>(
                 objectMapper.writeValueAsString(data), new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
