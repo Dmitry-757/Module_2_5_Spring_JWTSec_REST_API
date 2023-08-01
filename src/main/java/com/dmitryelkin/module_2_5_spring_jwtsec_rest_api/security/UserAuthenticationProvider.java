@@ -57,7 +57,6 @@ public class UserAuthenticationProvider {
         String dtoPassword = credentialsDto.getPassword();
 
         String encodedUserPassword = passwordEncoder.encode(user.getPassword());
-//        String encodedUserPassword = user.getPassword();
         if (passwordEncoder.matches(dtoPassword, encodedUserPassword)){
             UserDetails userDetails = JwtUserFactory.create(user);
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -83,7 +82,6 @@ public class UserAuthenticationProvider {
             User user = userService.getByName(decoded.getIssuer());
             UserDetails userDetails = JwtUserFactory.create(user);
 
-            //UsernamePasswordAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities)
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
         } catch (JWTVerificationException e){
@@ -104,8 +102,5 @@ public class UserAuthenticationProvider {
                 .withExpiresAt(validity)
                 .sign(algorithm);
     }
-
-
-
 
 }

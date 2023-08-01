@@ -29,11 +29,10 @@ public class FileServiceImpl implements FileServiceI {
 
     @Value("${aws.bucketName}")
     private String bucketName;
-//    private String bucketName = "myBucketName";
 
+//    @Value("${fileService.tmpFilePath}")
     @Value("${fileService.tmpFilePath}")
     private String tmpFilePath;
-//    private String tmpFilePath = "d:\\uploadingFile.tmp";
 
 
     @Autowired
@@ -51,7 +50,6 @@ public class FileServiceImpl implements FileServiceI {
 
     @Override
     public File upload(MultipartFile multipartFile) {
-//        java.io.File uploadingFile = file.getResource().getFile();
         java.io.File targetFile = new java.io.File( tmpFilePath);
 
         try(OutputStream outputStream = new FileOutputStream(targetFile)){
