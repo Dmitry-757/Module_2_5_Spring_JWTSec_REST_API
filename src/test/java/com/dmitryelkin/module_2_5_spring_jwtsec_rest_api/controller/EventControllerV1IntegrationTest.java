@@ -51,9 +51,6 @@ class EventControllerV1IntegrationTest extends SpringBootApplicationTest {
     @MockBean
     UserRepositoryI mockUserRepository;
 
-//    @MockBean
-//    EventServiceI mockEventService;
-
     @InjectMocks
     private EventServiceImpl service;
 
@@ -79,7 +76,6 @@ class EventControllerV1IntegrationTest extends SpringBootApplicationTest {
                 new Event(125L, LocalDateTime.now(), new User("userName3", "pass3"), new File(), Status.ACTIVE, TypeOfEvent.FORTEST)
         );
 
-//        BDDMockito.given(this.mockRepository.findAll()).willReturn(items);
         Mockito.doReturn(items).when(mockRepository).findAll();
             List<EventDTO> itemsDTO = items.stream()
                     .map(EventDTO::new)
